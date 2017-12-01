@@ -84,7 +84,7 @@ FileSink.prototype.sink = function () {
   if (typeof this.fd !== 'number') {
     fs.open(this.path, this.flags, this.mode, (error, fd) => {
       if (error) {
-        this.source.read(error)
+        this.source.pull(error)
       }
 
       this.fd = fd
@@ -98,17 +98,17 @@ FileSink.prototype.sink = function () {
 
 FileSink.prototype._read = function _read () {
   if (Buffer.isBuffer(this.buffer))
-    return this.source.read(null, this.buffer)
+    return this.source.pull(null, this.buffer)
 
   try {
     this.buffer = Buffer.allocUnsafe(64 * 1024)
   } catch (error) {
     return this.bindCb(error)
   }
-  this.source.read(null, this.buffer)
+  this.source.pull(null, this.buffer)
 }
 
-FileSink.prototype.next = function next (status, error, bytes) {
+FileSink.prototype.next = function next (status, error, _, bytes) {
   if (status === 'end') {
     return fs.close(this.fd, (closeError) => {
       if (closeError) {

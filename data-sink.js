@@ -36,7 +36,7 @@ class Sink {
     // write or process buffer
 
     if (sinkError) {
-      return this.source.read(error)
+      return this.source.pull(error)
     }
 
     this._read()
@@ -47,7 +47,7 @@ class Sink {
     // sink handles buffer allocation
     const buffer = new Buffer(0)
 
-    this.source.read(null, buffer)
+    this.source.pull(null, buffer)
   }
 }
 

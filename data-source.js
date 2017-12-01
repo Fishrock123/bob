@@ -10,18 +10,18 @@ class Source {
     this.sink = sink
   }
 
-  read (error, buffer) {
+  pull (error, buffer) {
     // error MUST be null or an error
     // buffer MUST be a Buffer
     if (error || sourceError) {
-      return this.source.next('error', error)
+      return this.sink.next('error', error)
     }
 
     // read into buffer
     if (more) {
-      this.source.next('continue', null, buffer, bytesWritten)
+      this.sink.next('continue', null, buffer, bytesWritten)
     } else {
-      this.source.next('end', null, buffer, bytesWritten)
+      this.sink.next('end', null, buffer, bytesWritten)
     }
   }
 }

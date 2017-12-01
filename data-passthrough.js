@@ -21,8 +21,8 @@ class PassThrough {
     this.sink.next(status, error, buffer, bytes)
   }
 
-  read (error, buffer) {
-    this.source.read(error, buffer)
+  pull (error, buffer) {
+    this.source.pull(error, buffer)
   }
 }
 

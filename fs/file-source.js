@@ -86,7 +86,7 @@ FileSource.prototype.bindSink = function bindSink (sink) {
   this.sink = sink
 }
 
-FileSource.prototype.read = function(error, buffer) {
+FileSource.prototype.pull = function(error, buffer) {
   if (error) {
     if (typeof this.fd === 'number') {
       fs.close(this.fd, (closeError) => {
@@ -131,13 +131,13 @@ FileSource.prototype._read = function(buffer) {
     } else {
       if (bytesRead > 0) {
         this.pos += bytesRead;
-        this.sink.next('continue', null, bytesRead)
+        this.sink.next('continue', null, buffer, bytesRead)
       } else {
         fs.close(this.fd, (closeError) => {
           if (closeError) {
             this.sink.next('error', closeError)
           } else {
-            this.sink.next('end', null, -1)
+            this.sink.next('end', null, buffer, -1)
           }
         })
       }
