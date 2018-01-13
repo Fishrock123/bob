@@ -35,7 +35,7 @@ class BufferedTransform {
 
       // transform buffer
 
-      return this.read(null, buffer)
+      return this.pull(null, buffer)
     }
 
     if (this._bytes + bytes > this._buffer.length) {
@@ -50,13 +50,13 @@ class BufferedTransform {
     this._bytes += bytes
 
     if (status === 'continue') {
-      return this.source.read(null, buffer)
+      return this.source.pull(null, buffer)
     }
   }
 
-  read (error, buffer) {
+  pull (error, buffer) {
     if (this._bytes === 0) {
-      return this.source.read(error, buffer)
+      return this.source.pull(error, buffer)
     }
 
     if (this._readPos >= this._bytes) {

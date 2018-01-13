@@ -42,7 +42,7 @@ function FileSource(path, options) {
   this.start = options.start;
   this.end = options.end;
   // this.autoClose = options.autoClose === undefined ? true : options.autoClose;
-  this.pos = undefined;
+  this.pos = 0;
   this.bytesRead = 0;
 
   if (this.start !== undefined) {
@@ -69,7 +69,7 @@ function FileSource(path, options) {
                                   errVal);
     }
 
-    this.pos = this.start || 0;
+    this.pos = this.start !== undefined ? this.start : 0;
   }
 
   // if (typeof this.fd !== 'number')
@@ -87,9 +87,12 @@ FileSource.prototype.bindSink = function bindSink (sink) {
 }
 
 FileSource.prototype.pull = function(error, buffer) {
+  console.log((new Error('FileSource pull')).stack)
   if (error) {
     if (typeof this.fd === 'number') {
+      console.log('PULL ERROR CLOSE')
       fs.close(this.fd, (closeError) => {
+        this.fd = null
         if (closeError) {
           this.sink.next('error', closeError)
         } else {
@@ -118,22 +121,38 @@ FileSource.prototype.pull = function(error, buffer) {
 
 FileSource.prototype._read = function(buffer) {
   if (typeof this.fd !== 'number') {
-    return this.read(null, buffer)
+    return this.pull(null, buffer)
   }
 
   if (this.destroyed)
     return;
 
+  if (buffer.length === 0) {
+    console.log((new Error('Buffer length was 0??')).stack)
+  }
 
   fs.read(this.fd, buffer, 0, buffer.length, this.pos, (error, bytesRead) => {
+    console.log('read', buffer.length, this.pos, bytesRead)
     if (error) {
-      cb('error', error)
+      console.log('FS READ ERROR CLOSE')
+      fs.close(this.fd, (closeError) => {
+        this.fd = null
+        if (closeError) {
+          this.sink.next('error', closeError)
+        } else {
+          this.sink.next('error', error)
+        }
+      })
     } else {
       if (bytesRead > 0) {
+        console.log('pos & bytes', this.pos, bytesRead)
         this.pos += bytesRead;
+        console.log('this.pos', this.pos)
         this.sink.next('continue', null, buffer, bytesRead)
       } else {
+        console.log('END CLOSE')
         fs.close(this.fd, (closeError) => {
+          this.fd = null
           if (closeError) {
             this.sink.next('error', closeError)
           } else {

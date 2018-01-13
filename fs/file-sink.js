@@ -112,12 +112,12 @@ FileSink.prototype.next = function next (status, error, _, bytes) {
   if (status === 'end') {
     return fs.close(this.fd, (closeError) => {
       if (closeError) {
-        this.source.read(error)
+        this.source.pull(error)
       }
       this.bindCb()
     })
   }
-  if (error) this.bindCb(error)
+  if (error) return this.bindCb(error)
 
   if (typeof this.fd !== 'number') {
     return this.bindCb(new Error('FD is not a number'))
@@ -127,7 +127,7 @@ FileSink.prototype.next = function next (status, error, _, bytes) {
 
   fs.write(this.fd, buf, 0, bytes, this.pos, (er, bytesWritten) => {
     if (error) {
-      this.source.read(error)
+      this.source.pull(error)
     } else {
       if (bytesWritten > 0) {
         this.pos += bytesWritten;
