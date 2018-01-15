@@ -14,18 +14,14 @@ Some collective goals for this initiative.
 ### Protocol
 As a preface, "protocol" refers to a system with "producer / source" and "consumer / sink" endpoints.
 
-- Protocol must be simple, certainly simpler than streams3.
-- Protocol is pull-only. The consumer requests ("pulls") data from the producer.
-- Data must be binary. No default support for "object mode".
-- The protocol itself must have no state carried over between multiple data segments.
-- Focused on interaction of protocol endpoints rather than full-stream management.
-- Protocol assumes one-to-one relationship between producer & consumer.
-  - (No EventEmitter-like model.)
-- Protocol should make no timing assumptions. Callbacks may be called sync or async.
-- Buffering of data (for any reason) is done outside of the protocol.
-  - (Either between, or at the ends of protocol interaction.)
-- Errors and data should flow through the same call path.
-- Callbacks should be the "EOF" mechanism.
+The Protocol must be simple:
+- Pull-based: The consumer requests ("pulls") data from the producer.
+- Binary-only: Data is binary buffers only, "object mode" and string encodings are not supported at the protocol level.
+- Stateless: The protocol must not require state to be maintained out-of-band.
+- One-to-one: The protocol assumes a one-to-one relationship between producer and consumer.
+- Timing agnostic: The protocol makes no timing (sync or async) assumptions.
+- No buffering: The protocol must not require buffering (although specific implementations might).
+- In-line errors and EOF: Errors, data, and EOF should flow through the same call path.
 
 ### Consumer
 - Should make no assumption on the timing of when data will be received, down to being fully synchronous.
