@@ -24,7 +24,7 @@ The Protocol must be simple:
 - In-line errors and EOF: Errors, data, and EOF should flow through the same call path.
 
 ### Consumer
-- Should make no assumption on the timing of when data will be received, down to being fully synchronous.
+- Should make no assumption on the timing of when data will be received (sync or async).
 - Should own any preallocated memory (the buffer).
 - Must never make more than one data request upstream at the same time.
 
