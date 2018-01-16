@@ -108,22 +108,33 @@ FileSink.prototype._read = function _read () {
   this.source.pull(null, this.buffer)
 }
 
-FileSink.prototype.next = function next (status, error, _, bytes) {
+FileSink.prototype.next = function next (status, error, _buf, bytes) {
   if (status === 'end') {
     return fs.close(this.fd, (closeError) => {
+      console.log('SINK CLOSED')
       if (closeError) {
-        this.source.pull(error)
+        this.source.pull(closeError)
       }
       this.bindCb()
     })
   }
-  if (error) return this.bindCb(error)
+  if (error) {
+    return fs.close(this.fd, (closeError) => {
+      console.log('UPSTREAM ERROR, SINK CLOSED')
+      if (closeError) {
+        this.source.pull(closeError)
+      }
+      this.bindCb(error)
+    })
+  }
 
   if (typeof this.fd !== 'number') {
     return this.bindCb(new Error('FD is not a number'))
   }
 
-  const buf = bytes === this.buffer.length ? this.buffer : this.buffer.slice(0, bytes)
+  const buf = Buffer.isBuffer(_buf) ? _buf : bytes === this.buffer.length ? this.buffer : this.buffer.slice(0, bytes)
+
+  console.log('$ write', _buf, buf)
 
   fs.write(this.fd, buf, 0, bytes, this.pos, (er, bytesWritten) => {
     if (error) {

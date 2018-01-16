@@ -2,6 +2,8 @@
 
 // Flags: --expose-internals
 
+const util = require('util')
+
 const errors = require('internal/errors');
 const Transform = require('_stream_transform');
 const { _extend } = require('util');
@@ -415,6 +417,7 @@ class ZlibTransform {
     // this.once('end', this.close);
 
     this._ended = false
+    this._pullFromHandle = false
   }
 
   bindSource (source) {
@@ -493,16 +496,24 @@ class ZlibTransform {
       // this.pull(null, buffer)
       // this.close()
     }
+    if (buffer === null) buffer = Buffer.alloc(0)
+    if (bytes < 0) bytes = 0
 
-    this._transform(buffer.slice(0, bytes), status, (error) => {
+    console.log('@ bytes ength sliceLength', bytes, buffer.length, buffer.slice(0, bytes).length)
+
+    this._transform(buffer.slice(0, bytes), status, (error, pullMore) => {
       if (error) {
         this.close()
         return this.sink.next(status, error)
       }
 
+      console.log('transform CB()', status, this._ended)
       if (status === 'end') return
 
-      this.source.pull(null, Buffer.alloc(1024 * 16))
+      // this.sink.next('continue', null, Buffer.alloc(0), 0)
+
+      console.log('PULLING more')
+      if (pullMore) this.source.pull(null, Buffer.alloc(1024 * 16))
     })
 
     // if (this._bytes + bytes > this._buffer.length) {
@@ -530,6 +541,7 @@ class ZlibTransform {
     var ws = {} //this._writableState;
     // if ((ws.ending || ws.ended) && ws.length === chunk.byteLength) {
     if (status === 'end') {
+      console.log('TRANSFORM FINAL FLUSH')
       // XXX: Should be on 'end' message?
       flushFlag = this._finishFlushFlag;
     } else {
@@ -545,7 +557,24 @@ class ZlibTransform {
   pull (error, buffer) {
     // if (this._bytes === 0) {
 
-    return this.source.pull(error, buffer || Buffer.alloc(1024 * 16))
+    if (this._ended) {
+      console.log((new Error('TRANSFORM END')).stack, error)
+      this.sink.next('end', null, Buffer.alloc(0), 0)
+      return
+    }
+
+    if (this._pullFromHandle) {
+      console.log('DOING PULL FROM HANDLE')
+      return this._handle.write(this._handle.flushFlag,
+                                this._handle.buffer, // in
+                                this._handle.inOff, // in_off
+                                this._handle.availInBefore, // in_len
+                                this._outBuffer, // out
+                                this._outOffset, // out_off
+                                this._chunkSize); // out_len
+    }
+
+    return this.source.pull(error, error ? undefined : buffer || Buffer.alloc(1024 * 16))
     // }
 
     // if (this._readPos >= this._bytes) {
@@ -570,7 +599,7 @@ function processChunk(self, chunk, flushFlag, cb) {
   handle.buffer = chunk;
   handle.cb = cb;
   handle.availOutBefore = self._chunkSize - self._outOffset;
-  handle.availInBefore = chunk.byteLength;
+  handle.availInBefore = chunk.length;
   handle.inOff = 0;
   handle.flushFlag = flushFlag;
 
@@ -644,11 +673,9 @@ function processCallback() {
 
     pullMore = false
 
-    if (self._ended) {
-      self.sink.next('end', null, out, out.length)
-    } else {
-      self.sink.next('continue', null, out, out.length)
-    }
+    console.log('TRANSFORM WRITE', availOutAfter === 0, util.format(out), out.length)
+
+    self.sink.next('continue', null, out, out.length)
   } else if (have < 0) {
     assert(false, 'have should not go down');
   }
@@ -661,7 +688,6 @@ function processCallback() {
   }
 
   if (availOutAfter === 0) {
-    pullMore = false
     // Not actually done. Need to reprocess.
     // Also, update the availInBefore to the availInAfter value,
     // so that if we have to hit it a third (fourth, etc.) time,
@@ -669,20 +695,18 @@ function processCallback() {
     handle.inOff += inDelta;
     handle.availInBefore = availInAfter;
 
-    console.log((new Error('write in processCallback')).stack)
-    this.write(handle.flushFlag,
-               this.buffer, // in
-               handle.inOff, // in_off
-               handle.availInBefore, // in_len
-               self._outBuffer, // out
-               self._outOffset, // out_off
-               self._chunkSize); // out_len
+    self._pullFromHandle = true
+
+    console.log((new Error('pull more from handle on pull()')).stack)
+
+    if (have === 0) self.sink.next('continue', null, Buffer.alloc(0), 0)
+
     return;
   }
 
   // finished with the chunk.
-  this.buffer = null;
-  if (pullMore) this.cb();
+  // this.buffer = null;
+  this.cb(null, pullMore);
 }
 
 

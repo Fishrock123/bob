@@ -120,6 +120,7 @@ FileSource.prototype.pull = function(error, buffer) {
 }
 
 FileSource.prototype._read = function(buffer) {
+  console.log((new Error('READ')).stack)
   if (typeof this.fd !== 'number') {
     return this.pull(null, buffer)
   }
