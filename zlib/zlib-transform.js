@@ -557,14 +557,8 @@ class ZlibTransform {
   pull (error, buffer) {
     // if (this._bytes === 0) {
 
-    if (this._ended) {
-      console.log((new Error('TRANSFORM END')).stack, error)
-      this.sink.next('end', null, Buffer.alloc(0), 0)
-      return
-    }
-
     if (this._pullFromHandle) {
-      console.log('DOING PULL FROM HANDLE')
+      console.log('DOING PULL FROM HANDLE', this._outBuffer.length, this._outOffset, this._chunkSize)
       return this._handle.write(this._handle.flushFlag,
                                 this._handle.buffer, // in
                                 this._handle.inOff, // in_off
@@ -572,6 +566,12 @@ class ZlibTransform {
                                 this._outBuffer, // out
                                 this._outOffset, // out_off
                                 this._chunkSize); // out_len
+    }
+
+    if (this._ended) {
+      console.log((new Error('TRANSFORM END')).stack, error)
+      this.sink.next('end', null, Buffer.alloc(0), 0)
+      return
     }
 
     return this.source.pull(error, error ? undefined : buffer || Buffer.alloc(1024 * 16))
@@ -687,6 +687,8 @@ function processCallback() {
     self._outBuffer = Buffer.allocUnsafe(self._chunkSize);
   }
 
+  self._pullFromHandle = false
+
   if (availOutAfter === 0) {
     // Not actually done. Need to reprocess.
     // Also, update the availInBefore to the availInAfter value,
@@ -705,7 +707,8 @@ function processCallback() {
   }
 
   // finished with the chunk.
-  // this.buffer = null;
+  console.log('CHUNK CLEANUP')
+  this.buffer = null;
   this.cb(null, pullMore);
 }
 
