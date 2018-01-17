@@ -45,7 +45,6 @@ for (var ck = 0; ck < ckeys.length; ck++) {
   codes[codes[ckey]] = ckey;
 }
 
-
 // If a flush is scheduled while another flush is still pending, a way to figure
 // out which one is the "stronger" flush is needed.
 // Roughly, the following holds:
@@ -61,10 +60,6 @@ for (const flushFlag of [Z_NO_FLUSH, Z_BLOCK, Z_PARTIAL_FLUSH,
 function maxFlush(a, b) {
   return flushiness[a] > flushiness[b] ? a : b;
 }
-
-
-// #########################################################
-
 
 class ZlibTransform {
   constructor (opts, mode) {
@@ -200,8 +195,8 @@ class ZlibTransform {
     this._origFlushFlag = flush;
     this._finishFlushFlag = finishFlush;
     this._info = opts && opts.info;
-    // this.once('end', this.close);
 
+    // The streams+ state
     this._ended = false
     this._pullFromHandle = false
   }
@@ -383,8 +378,6 @@ class ZlibTransform {
   }
 }
 
-module.exports = ZlibTransform
-
 function zlibOnError(message, errno) {
   var self = this.jsref;
   // there is no way to cleanly recover.
@@ -479,55 +472,7 @@ function processCallback() {
   this.cb(null, pullMore);
 }
 
-
-// *******************************************
-
-// generic zlib
-// minimal 2-byte header
-// function Deflate(opts) {
-//   if (!(this instanceof Deflate))
-//     return new Deflate(opts);
-//   Zlib.call(this, opts, DEFLATE);
-// }
-// inherits(Deflate, Zlib);
-//
-// function Inflate(opts) {
-//   if (!(this instanceof Inflate))
-//     return new Inflate(opts);
-//   Zlib.call(this, opts, INFLATE);
-// }
-// inherits(Inflate, Zlib);
-//
-// function Gzip(opts) {
-//   if (!(this instanceof Gzip))
-//     return new Gzip(opts);
-//   Zlib.call(this, opts, GZIP);
-// }
-// inherits(Gzip, Zlib);
-//
-// function Gunzip(opts) {
-//   if (!(this instanceof Gunzip))
-//     return new Gunzip(opts);
-//   Zlib.call(this, opts, GUNZIP);
-// }
-// inherits(Gunzip, Zlib);
-//
-// function Unzip(opts) {
-//   if (!(this instanceof Unzip))
-//     return new Unzip(opts);
-//   Zlib.call(this, opts, UNZIP);
-// }
-// inherits(Unzip, Zlib);
-
-// module.exports = {
-//   Deflate,
-//   Inflate,
-//   Gzip,
-//   Gunzip,
-//   DeflateRaw,
-//   InflateRaw,
-//   Unzip
-// };
+module.exports = ZlibTransform
 
 Object.defineProperties(module.exports, {
   constants: {
