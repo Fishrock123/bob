@@ -266,7 +266,6 @@ class ZlibTransform {
   // }
 
   next (status, error, buffer, bytes) {
-    console.log((new Error('ZlibTransform next')).stack)
     if (error !== null) {
       this.close()
       return this.sink.next(status, error)
@@ -277,8 +276,6 @@ class ZlibTransform {
     if (buffer === null) buffer = Buffer.alloc(0)
     if (bytes < 0) bytes = 0
 
-    console.log('@ bytes ength sliceLength', bytes, buffer.length, buffer.slice(0, bytes).length)
-
     // If it's the last chunk, or a final flush, we use the Z_FINISH flush flag
     // (or whatever flag was provided using opts.finishFlush).
     // If it's explicitly flushing at some other time, then we use
@@ -287,7 +284,6 @@ class ZlibTransform {
     var ws = {} //this._writableState;
     // if ((ws.ending || ws.ended) && ws.length === chunk.byteLength) {
     if (status === 'end') {
-      console.log('TRANSFORM FINAL FLUSH')
       // XXX: Should be on 'end' message?
       flushFlag = this._finishFlushFlag;
     } else {
@@ -310,10 +306,8 @@ class ZlibTransform {
         return this.sink.next(status, error)
       }
 
-      console.log('transform CB()', status, this._ended)
       if (status === 'end') return
 
-      console.log('PULLING more')
       if (pullMore) this.source.pull(null, Buffer.alloc(1024 * 16))
     }
 
@@ -326,7 +320,6 @@ class ZlibTransform {
     handle.inOff = 0;
     handle.flushFlag = flushFlag;
 
-    console.log((new Error('write in processChunk')).stack)
     handle.write(flushFlag,
                  chunk, // in
                  0, // in_off
@@ -355,8 +348,6 @@ class ZlibTransform {
     // if (this._bytes === 0) {
 
     if (this._pullFromHandle) {
-      console.log('DOING PULL FROM HANDLE', this._outBuffer.length, this._outOffset, this._chunkSize)
-
       var handle = this._handle;
       if (!handle) {
         this.close()
@@ -373,7 +364,6 @@ class ZlibTransform {
     }
 
     if (this._ended) {
-      console.log((new Error('TRANSFORM END')).stack, error)
       this.sink.next('end', null, Buffer.alloc(0), 0)
       return
     }
@@ -412,7 +402,6 @@ function zlibOnError(message, errno) {
 
 function _close(engine, callback) {
   // Caller may invoke .close after a zlib error (which will null _handle).
-  console.log((new Error('_close()')).stack)
 
   if (!engine._handle)
     return;
@@ -422,7 +411,6 @@ function _close(engine, callback) {
 }
 
 function processCallback() {
-  console.log('processCallback()')
   // This callback's context (`this`) is the `_handle` (ZCtx) object. It is
   // important to null out the values once they are no longer needed since
   // `_handle` can stay in memory long after the buffer is needed.
@@ -455,8 +443,6 @@ function processCallback() {
 
     pullMore = false
 
-    console.log('TRANSFORM WRITE', availOutAfter === 0, util.format(out), out.length)
-
     self.sink.next('continue', null, out, out.length)
   } else if (have < 0) {
     assert(false, 'have should not go down');
@@ -481,10 +467,7 @@ function processCallback() {
 
     self._pullFromHandle = true
 
-    console.log((new Error('pull more from handle on pull()')).stack)
-
     if (have === 0) {
-      console.log('## Have 0, continue ###')
       self.sink.next('continue', null, Buffer.alloc(0), 0)
     }
 
@@ -492,7 +475,6 @@ function processCallback() {
   }
 
   // finished with the chunk.
-  console.log('CHUNK CLEANUP')
   this.buffer = null;
   this.cb(null, pullMore);
 }

@@ -87,10 +87,8 @@ FileSource.prototype.bindSink = function bindSink (sink) {
 }
 
 FileSource.prototype.pull = function(error, buffer) {
-  console.log((new Error('FileSource pull')).stack)
   if (error) {
     if (typeof this.fd === 'number') {
-      console.log('PULL ERROR CLOSE')
       fs.close(this.fd, (closeError) => {
         this.fd = null
         if (closeError) {
@@ -120,7 +118,6 @@ FileSource.prototype.pull = function(error, buffer) {
 }
 
 FileSource.prototype._read = function(buffer) {
-  console.log((new Error('READ')).stack)
   if (typeof this.fd !== 'number') {
     return this.pull(null, buffer)
   }
@@ -128,14 +125,8 @@ FileSource.prototype._read = function(buffer) {
   if (this.destroyed)
     return;
 
-  if (buffer.length === 0) {
-    console.log((new Error('Buffer length was 0??')).stack)
-  }
-
   fs.read(this.fd, buffer, 0, buffer.length, this.pos, (error, bytesRead) => {
-    console.log('read', buffer.length, this.pos, bytesRead)
     if (error) {
-      console.log('FS READ ERROR CLOSE')
       fs.close(this.fd, (closeError) => {
         this.fd = null
         if (closeError) {
@@ -146,12 +137,9 @@ FileSource.prototype._read = function(buffer) {
       })
     } else {
       if (bytesRead > 0) {
-        console.log('pos & bytes', this.pos, bytesRead)
         this.pos += bytesRead;
-        console.log('this.pos', this.pos)
         this.sink.next('continue', null, buffer, bytesRead)
       } else {
-        console.log('END CLOSE')
         fs.close(this.fd, (closeError) => {
           this.fd = null
           if (closeError) {
