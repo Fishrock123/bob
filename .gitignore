@@ -1,5 +1,10 @@
 profiles
+node_modules
+build
 
 tests/fixtures/test_
 
-build/
+*.gz
+*.log
+
+package-lock.json
