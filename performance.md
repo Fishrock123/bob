@@ -43,3 +43,15 @@ Output from `/usr/bin/time`:
 41.70user 118.49system 9:12.61elapsed 28%CPU (0avgtext+0avgdata 104132maxresident)k
 77866712inputs+83341208outputs (1major+73866minor)pagefaults 0swaps
 ```
+
+### `zlib-transform-test.js`
+
+[Profile using 38GB file](profiles/zlib-bob-big-prof)
+
+No `/usr/bin/time` captured. Ran for ~20 minutes.
+
+### `zlib-transform-test-streams3.js`
+
+[Profile using 38GB file](profiles/zlib-streams3-big-prof)
+
+No `/usr/bin/time` captured. Ran for ~20+ minutes.
