@@ -1,8 +1,8 @@
-# bob
+# BOB
 
 A Work-In-Progress binary data "streams+" implementation via data producers, data consumers, and pull flow.
 
-_The name? something something b~~l~~ob, credit Matteo Collina._
+_The name? something something B~~L~~OB, credit Matteo Collina._
 
 ## Goals
 Some collective goals for this initiative.
