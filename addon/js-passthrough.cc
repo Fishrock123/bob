@@ -113,7 +113,7 @@ napi_value PassThrough::BindSource(napi_env env, napi_callback_info info) {
   napi_value global;
   status = napi_get_global(env, &global);
   assert(status == napi_ok);
-  PRINT_NAPI_TYPE(global, "0");
+  // PRINT_NAPI_TYPE(global, "0");
 
   napi_value console;
   status = napi_get_named_property(env,
@@ -121,7 +121,7 @@ napi_value PassThrough::BindSource(napi_env env, napi_callback_info info) {
                                    "console",
                                    &console);
   assert(status == napi_ok);
-  PRINT_NAPI_TYPE(console, "1");
+  // PRINT_NAPI_TYPE(console, "1");
 
   napi_value log_;
   status = napi_get_named_property(env,
@@ -129,7 +129,7 @@ napi_value PassThrough::BindSource(napi_env env, napi_callback_info info) {
                                    "log",
                                    &log_);
   assert(status == napi_ok);
-  PRINT_NAPI_TYPE(log_, "2");
+  // PRINT_NAPI_TYPE(log_, "2");
 
   napi_value console_args[1] = { source };
   status = napi_call_function(env,
@@ -147,7 +147,7 @@ napi_value PassThrough::BindSource(napi_env env, napi_callback_info info) {
                                    "bindSink",
                                    &source_bindsink);
   assert(status == napi_ok);
-  PRINT_NAPI_TYPE(source_bindsink, "4");
+  // PRINT_NAPI_TYPE(source_bindsink, "4");
 
   napi_value argv_[1] = { jsthis };
   status = napi_call_function(env,
@@ -156,7 +156,7 @@ napi_value PassThrough::BindSource(napi_env env, napi_callback_info info) {
                               1,
                               argv_,
                               nullptr);
-  PRINT_NAPI_ERROR_MESSAGE(status, "source.bindSink()");
+  // PRINT_NAPI_ERROR_MESSAGE(status, "source.bindSink()");
   assert(status == napi_ok);
 
   PassThrough* obj;
@@ -246,7 +246,7 @@ napi_value PassThrough::Pull(napi_env env, napi_callback_info info) {
   status = napi_get_reference_value(env, obj->source_, &source);
   assert(status == napi_ok);
 
-  PRINT_NAPI_TYPE(source, "5");
+  // PRINT_NAPI_TYPE(source, "5");
 
   napi_value source_pull;
   status = napi_get_named_property(env,
@@ -255,7 +255,7 @@ napi_value PassThrough::Pull(napi_env env, napi_callback_info info) {
                                    &source_pull);
   assert(status == napi_ok);
 
-  PRINT_NAPI_TYPE(source_pull, "5");
+  // PRINT_NAPI_TYPE(source_pull, "5");
 
   status = napi_call_function(env,
                               source,
@@ -263,8 +263,8 @@ napi_value PassThrough::Pull(napi_env env, napi_callback_info info) {
                               2,
                               argv,
                               nullptr);
-  PRINT_NAPI_ERROR_MESSAGE(status, "10");
-  PRINT_NAPI_STATUS(status, "20");
+  // PRINT_NAPI_ERROR_MESSAGE(status, "10");
+  // PRINT_NAPI_STATUS(status, "20");
   // assert(status == napi_ok);
 
   return nullptr;
