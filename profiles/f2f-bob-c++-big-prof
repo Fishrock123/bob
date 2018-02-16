@@ -1,0 +1,364 @@
+Statistical profiling result from isolate-f2f-bob-c++-v8.log, (190941 ticks, 631 unaccounted, 0 excluded).
+
+ [Shared libraries]:
+   ticks  total  nonlib   name
+   1115    0.6%          /lib/x86_64-linux-gnu/libpthread-2.23.so
+    170    0.1%          /lib/x86_64-linux-gnu/libc-2.23.so
+     78    0.0%          [vdso]
+      9    0.0%          /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.21
+      2    0.0%          /lib/x86_64-linux-gnu/libm-2.23.so
+
+ [JavaScript]:
+   ticks  total  nonlib   name
+    215    0.1%    0.1%  Builtin: CompileLazy
+    112    0.1%    0.1%  LazyCompile: *next /home/jeremiah/Documents/bob/fs/file-sink.js:111:41
+     87    0.0%    0.0%  LazyCompile: *FileSource.pull /home/jeremiah/Documents/bob/fs/file-source.js:89:37
+     78    0.0%    0.0%  Stub: JSEntryStub
+     57    0.0%    0.0%  Builtin: CallFunction_ReceiverIsAny
+     53    0.0%    0.0%  LazyCompile: *fs.write /home/jeremiah/Documents/bob/fs/file-sink.js:128:46
+     53    0.0%    0.0%  Builtin: JSEntryTrampoline
+     46    0.0%    0.0%  LazyCompile: *fs.read /home/jeremiah/Documents/bob/fs/file-source.js:128:56
+     46    0.0%    0.0%  Builtin: JSConstructStubApi
+     42    0.0%    0.0%  Builtin: RecordWrite
+     37    0.0%    0.0%  Builtin: Call_ReceiverIsAny
+     33    0.0%    0.0%  Stub: CallApiCallbackStub {2}
+     31    0.0%    0.0%  Builtin: StrictEqual
+     25    0.0%    0.0%  Builtin: ArgumentsAdaptorTrampoline
+     22    0.0%    0.0%  LazyCompile: *wrapper fs.js:852:19
+     21    0.0%    0.0%  LazyCompile: *wrapper fs.js:814:19
+     15    0.0%    0.0%  Builtin: HandleApiCall
+     15    0.0%    0.0%  Builtin: CallFunction_ReceiverIsNullOrUndefined
+     10    0.0%    0.0%  Stub: DoubleToIStub
+     10    0.0%    0.0%  Stub: CEntryStub
+      9    0.0%    0.0%  Stub: CallApiCallbackStub
+      8    0.0%    0.0%  Builtin: Call_ReceiverIsNullOrUndefined
+      6    0.0%    0.0%  Stub: CallApiCallbackStub {1}
+      2    0.0%    0.0%  Builtin: AdaptorWithExitFrame
+      1    0.0%    0.0%  Builtin: KeyedLoadIC
+      1    0.0%    0.0%  Builtin: InterpreterEntryTrampoline
+
+ [C++]:
+   ticks  total  nonlib   name
+  178639   93.6%   94.2%  syscall
+   2504    1.3%    1.3%  __pthread_cond_signal
+    611    0.3%    0.3%  node::fs::NewFSReqWrap(v8::FunctionCallbackInfo<v8::Value> const&)
+    273    0.1%    0.1%  v8::internal::LookupIterator::PropertyOrElement(v8::internal::Isolate*, v8::internal::Handle<v8::internal::Object>, v8::internal::Handle<v8::internal::Object>, bool*, v8::internal::LookupIterator::Configuration)
+    219    0.1%    0.1%  v8::internal::Execution::Call(v8::internal::Isolate*, v8::internal::Handle<v8::internal::Object>, v8::internal::Handle<v8::internal::Object>, int, v8::internal::Handle<v8::internal::Object>*)
+    156    0.1%    0.1%  v8::internal::LookupIterator::State v8::internal::LookupIterator::LookupInRegularHolder<false>(v8::internal::Map*, v8::internal::JSReceiver*)
+    133    0.1%    0.1%  v8::Context::Enter()
+    116    0.1%    0.1%  uv__io_poll
+    115    0.1%    0.1%  v8::Isolate::GetCurrentContext()
+    115    0.1%    0.1%  uv__async_io
+    114    0.1%    0.1%  (anonymous namespace)::v8impl::FunctionCallbackWrapper::Invoke(v8::FunctionCallbackInfo<v8::Value> const&)
+    108    0.1%    0.1%  v8::External::Value() const
+     99    0.1%    0.1%  node::InternalCallbackScope::Close()
+     98    0.1%    0.1%  node::InternalCallbackScope::InternalCallbackScope(node::Environment*, v8::Local<v8::Object>, node::async_context const&, node::InternalCallbackScope::ResourceExpectation)
+     95    0.0%    0.1%  v8::internal::Heap::CopyJSObject(v8::internal::JSObject*, v8::internal::AllocationSite*)
+     88    0.0%    0.0%  node::InternalMakeCallback(node::Environment*, v8::Local<v8::Object>, v8::Local<v8::Function>, int, v8::Local<v8::Value>*, node::async_context)
+     87    0.0%    0.0%  node::AsyncWrap::EmitTraceEventBefore()
+     85    0.0%    0.0%  __GI___pthread_getspecific
+     84    0.0%    0.0%  __GI___pthread_mutex_lock
+     82    0.0%    0.0%  v8::internal::MaybeHandle<v8::internal::Object> v8::internal::(anonymous namespace)::HandleApiCallHelper<true>(v8::internal::Isolate*, v8::internal::Handle<v8::internal::HeapObject>, v8::internal::Handle<v8::internal::HeapObject>, v8::internal::Handle<v8::internal::FunctionTemplateInfo>, v8::internal::Handle<v8::internal::Object>, v8::internal::BuiltinArguments)
+     82    0.0%    0.0%  v8::Function::Call(v8::Local<v8::Context>, v8::Local<v8::Value>, int, v8::Local<v8::Value>*)
+     81    0.0%    0.0%  v8::Value::IsFunction() const
+     81    0.0%    0.0%  v8::Object::Get(v8::Local<v8::Value>)
+     81    0.0%    0.0%  v8::Object::Get(v8::Local<v8::Context>, v8::Local<v8::Value>)
+     80    0.0%    0.0%  v8::internal::JSObject::FastPropertyAt(v8::internal::Handle<v8::internal::JSObject>, v8::internal::Representation, v8::internal::FieldIndex)
+     79    0.0%    0.0%  v8::internal::String::IsUtf8EqualTo(v8::internal::Vector<char const>, bool)
+     78    0.0%    0.0%  v8::(anonymous namespace)::CallDepthScope<true>::CallDepthScope(v8::internal::Isolate*, v8::Local<v8::Context>)
+     76    0.0%    0.0%  v8::HandleScope::Initialize(v8::Isolate*)
+     73    0.0%    0.0%  v8::internal::Logger::ApiEntryCall(char const*)
+     72    0.0%    0.0%  v8::internal::StringHasher::ComputeUtf8Hash(v8::internal::Vector<char const>, unsigned int, int*)
+     65    0.0%    0.0%  v8::internal::Object::GetProperty(v8::internal::LookupIterator*)
+     64    0.0%    0.0%  node::AsyncWrap::EmitTraceEventAfter()
+     63    0.0%    0.0%  v8::internal::Map::FindRootMap() const
+     61    0.0%    0.0%  v8::Context::Exit()
+     61    0.0%    0.0%  sigemptyset
+     59    0.0%    0.0%  v8::internal::LookupIterator::FetchValue() const [clone .part.49]
+     57    0.0%    0.0%  v8::internal::ApiNatives::InstantiateObject(v8::internal::Handle<v8::internal::ObjectTemplateInfo>, v8::internal::Handle<v8::internal::JSReceiver>)
+     56    0.0%    0.0%  (anonymous namespace)::v8impl::Unwrap(napi_env__*, napi_value__*, void**, (anonymous namespace)::v8impl::UnwrapAction) [clone .part.30]
+     55    0.0%    0.0%  v8::internal::Builtin_HandleApiCall(int, v8::internal::Object**, v8::internal::Isolate*)
+     54    0.0%    0.0%  node::fs::AfterInteger(uv_fs_s*)
+     52    0.0%    0.0%  v8::internal::(anonymous namespace)::ProbeInstantiationsCache(v8::internal::Isolate*, int, v8::internal::(anonymous namespace)::CachingMode)
+     51    0.0%    0.0%  node::AsyncWrap::MakeCallback(v8::Local<v8::Function>, int, v8::Local<v8::Value>*)
+     51    0.0%    0.0%  (anonymous namespace)::v8impl::FunctionCallbackWrapper::Args(napi_value__**, unsigned long)
+     50    0.0%    0.0%  void v8::internal::LookupIterator::NextInternal<false>(v8::internal::Map*, v8::internal::JSReceiver*)
+     49    0.0%    0.0%  v8::Value::IsExternal() const
+     49    0.0%    0.0%  cfree
+     48    0.0%    0.0%  v8::internal::GlobalHandles::Destroy(v8::internal::Object**)
+     47    0.0%    0.0%  v8::internal::StringTable::LookupKey(v8::internal::Isolate*, v8::internal::StringTableKey*)
+     45    0.0%    0.0%  v8::Value::IsObject() const
+     44    0.0%    0.0%  v8::internal::ThreadId::GetCurrentThreadId()
+     44    0.0%    0.0%  v8::Locker::IsActive()
+     44    0.0%    0.0%  uv__run_check
+     43    0.0%    0.0%  node::fs::Read(v8::FunctionCallbackInfo<v8::Value> const&)
+     43    0.0%    0.0%  node::fs::FSReqWrap::Resolve(v8::Local<v8::Value>)
+     43    0.0%    0.0%  napi_call_function
+     42    0.0%    0.0%  v8::internal::HashTable<v8::internal::StringTable, v8::internal::StringTableShape>::FindEntry(v8::internal::Isolate*, v8::internal::StringTableKey*)
+     42    0.0%    0.0%  uv__run_prepare
+     40    0.0%    0.0%  v8::internal::HandleScope::Extend(v8::internal::Isolate*)
+     40    0.0%    0.0%  __clock_gettime
+     39    0.0%    0.0%  v8::internal::Heap::AllocateRaw(int, v8::internal::AllocationSpace, v8::internal::AllocationAlignment)
+     39    0.0%    0.0%  node::fs::WriteBuffer(v8::FunctionCallbackInfo<v8::Value> const&)
+     39    0.0%    0.0%  node::fs::FSReqWrap::~FSReqWrap()
+     38    0.0%    0.0%  v8::internal::HandleScope::DeleteExtensions(v8::internal::Isolate*)
+     38    0.0%    0.0%  napi_get_cb_info
+     38    0.0%    0.0%  __GI___pthread_once
+     37    0.0%    0.0%  v8::internal::TimerEventScope<v8::internal::TimerEventExecute>::LogTimerEvent(v8::internal::Logger::StartEnd)
+     37    0.0%    0.0%  napi_get_reference_value
+     37    0.0%    0.0%  _init
+     36    0.0%    0.0%  v8::TryCatch::TryCatch(v8::Isolate*)
+     36    0.0%    0.0%  strlen
+     33    0.0%    0.0%  v8::internal::JSTypedArray::GetBuffer()
+     33    0.0%    0.0%  uv_run
+     32    0.0%    0.0%  node::AsyncWrap::EmitBefore(node::Environment*, double)
+     31    0.0%    0.0%  v8::internal::Isolate::FireCallCompletedCallback()
+     31    0.0%    0.0%  v8::Object::InternalFieldCount()
+     31    0.0%    0.0%  v8::EscapableHandleScope::Escape(v8::internal::Object**)
+     31    0.0%    0.0%  napi_unwrap
+     28    0.0%    0.0%  uv__run_idle
+     28    0.0%    0.0%  node::contextify::ContextifyScript::New(v8::FunctionCallbackInfo<v8::Value> const&)
+     28    0.0%    0.0%  node::AsyncWrap::EmitTraceEventDestroy()
+     27    0.0%    0.0%  v8::internal::FunctionCallbackArguments::Call(void (*)(v8::FunctionCallbackInfo<v8::Value> const&))
+     27    0.0%    0.0%  v8::(anonymous namespace)::CallDepthScope<false>::CallDepthScope(v8::internal::Isolate*, v8::Local<v8::Context>)
+     27    0.0%    0.0%  __GI___pthread_mutex_unlock
+     26    0.0%    0.0%  v8::Value::IsArrayBufferView() const
+     25    0.0%    0.0%  uv__work_done
+     25    0.0%    0.0%  __errno_location
+     24    0.0%    0.0%  v8::internal::Runtime::GetObjectProperty(v8::internal::Isolate*, v8::internal::Handle<v8::internal::Object>, v8::internal::Handle<v8::internal::Object>, bool*)
+     24    0.0%    0.0%  v8::ArrayBuffer::GetContents()
+     24    0.0%    0.0%  sigaddset
+     24    0.0%    0.0%  __pthread_enable_asynccancel
+     23    0.0%    0.0%  v8::internal::Factory::InternalizeUtf8String(v8::internal::Vector<char const>)
+     23    0.0%    0.0%  v8::Value::ToObject(v8::Local<v8::Context>) const
+     22    0.0%    0.0%  v8::HandleScope::~HandleScope()
+     21    0.0%    0.0%  napi_get_named_property
+     20    0.0%    0.0%  v8::TryCatch::HasCaught() const
+     20    0.0%    0.0%  v8::(anonymous namespace)::CallDepthScope<true>::~CallDepthScope() [clone .constprop.576]
+     20    0.0%    0.0%  node::Environment::CheckImmediate(uv_check_s*)
+     19    0.0%    0.0%  v8::Value::Int32Value() const
+     18    0.0%    0.0%  void v8::internal::LookupIterator::Start<false>()
+     18    0.0%    0.0%  v8::Value::IsNumber() const
+     18    0.0%    0.0%  v8::(anonymous namespace)::CallDepthScope<false>::~CallDepthScope() [clone .constprop.574]
+     18    0.0%    0.0%  uv_fs_req_cleanup
+     18    0.0%    0.0%  operator delete(void*)
+     17    0.0%    0.0%  v8::internal::JSObject::GetHeaderSize(v8::internal::InstanceType, bool)
+     16    0.0%    0.0%  v8::internal::Map::IsUnboxedDoubleField(v8::internal::FieldIndex) const
+     16    0.0%    0.0%  v8::internal::Isolate::RunMicrotasksInternal()
+     16    0.0%    0.0%  v8::internal::Isolate::RunMicrotasks()
+     16    0.0%    0.0%  v8::internal::Isolate::RegisterTryCatchHandler(v8::TryCatch*)
+     16    0.0%    0.0%  v8::base::Thread::GetThreadLocal(int)
+     16    0.0%    0.0%  uv__fs_done
+     15    0.0%    0.0%  void v8::internal::CopyWords<v8::internal::Object*>(v8::internal::Object**, v8::internal::Object* const*, unsigned long)
+     15    0.0%    0.0%  v8::internal::SaveContext::SaveContext(v8::internal::Isolate*)
+     15    0.0%    0.0%  v8::internal::LookupIterator::GetDataValue() const
+     15    0.0%    0.0%  v8::String::NewFromUtf8(v8::Isolate*, char const*, v8::NewStringType, int)
+     15    0.0%    0.0%  v8::Isolate::SuppressMicrotaskExecutionScope::SuppressMicrotaskExecutionScope(v8::Isolate*)
+     15    0.0%    0.0%  v8::HandleScope::CreateHandle(v8::internal::HeapObject*, v8::internal::Object*)
+     15    0.0%    0.0%  operator delete(void*, unsigned long)
+     15    0.0%    0.0%  __GI___libc_read
+     14    0.0%    0.0%  v8::TryCatch::~TryCatch()
+     14    0.0%    0.0%  node::AsyncWrap::EmitAfter(node::Environment*, double)
+     13    0.0%    0.0%  v8::internal::Utf8StringKey::IsMatch(v8::internal::Object*)
+     13    0.0%    0.0%  v8::EscapableHandleScope::EscapableHandleScope(v8::Isolate*)
+     13    0.0%    0.0%  uv_buf_init
+     13    0.0%    0.0%  node::fs::GetReqWrap(node::Environment*, v8::Local<v8::Value>)
+     12    0.0%    0.0%  uv__hrtime
+     11    0.0%    0.0%  uv_fs_read
+     11    0.0%    0.0%  uv__run_timers
+     11    0.0%    0.0%  uv__epoll_pwait
+     11    0.0%    0.0%  uv(float, long double,...)(...)
+     10    0.0%    0.0%  v8::HandleScope::HandleScope(v8::Isolate*)
+      9    0.0%    0.0%  v8::internal::SaveContext::~SaveContext()
+      9    0.0%    0.0%  v8::Isolate::RunMicrotasks()
+      9    0.0%    0.0%  v8::CpuProfiler::SetIdle(bool)
+      9    0.0%    0.0%  v8::ArrayBufferView::ByteLength()
+      9    0.0%    0.0%  uv_fs_write
+      9    0.0%    0.0%  uv__next_timeout
+      9    0.0%    0.0%  __lll_unlock_wake
+      9    0.0%    0.0%  __lll_lock_wait
+      8    0.0%    0.0%  v8::Integer::New(v8::Isolate*, int)
+      8    0.0%    0.0%  node::AsyncWrap::~AsyncWrap()
+      7    0.0%    0.0%  v8::internal::PerIsolateAssertScope<(v8::internal::PerIsolateAssertType)0, true>::IsAllowed(v8::internal::Isolate*)
+      7    0.0%    0.0%  v8::internal::Factory::CopyJSObject(v8::internal::Handle<v8::internal::JSObject>)
+      7    0.0%    0.0%  v8::Value::Uint32Value() const
+      7    0.0%    0.0%  v8::Object::SetAlignedPointerInInternalField(int, void*)
+      7    0.0%    0.0%  uv__work_submit
+      7    0.0%    0.0%  node::Environment::StartProfilerIdleNotifier()::{lambda(uv_check_s*)#2}::_FUN(uv_check_s*)
+      6    0.0%    0.0%  v8::internal::SerializerDeserializer::Iterate(v8::internal::Isolate*, v8::internal::RootVisitor*)
+      6    0.0%    0.0%  v8::ArrayBufferView::Buffer()
+      5    0.0%    0.0%  v8::internal::Logger::ApiObjectAccess(char const*, v8::internal::JSObject*)
+      5    0.0%    0.0%  v8::Value::IntegerValue() const
+      5    0.0%    0.0%  v8::Isolate::SuppressMicrotaskExecutionScope::~SuppressMicrotaskExecutionScope()
+      4    0.0%    0.0%  v8::ArrayBufferView::ByteOffset()
+      3    0.0%    0.0%  node::fs::FSReqWrap::SetReturnValue(v8::FunctionCallbackInfo<v8::Value> const&)
+      3    0.0%    0.0%  node::Environment::StartProfilerIdleNotifier()::{lambda(uv_prepare_s*)#1}::_FUN(uv_prepare_s*)
+      3    0.0%    0.0%  node::Buffer::Data(v8::Local<v8::Object>)
+      3    0.0%    0.0%  __libc_malloc
+      3    0.0%    0.0%  _IO_vfprintf
+      2    0.0%    0.0%  write
+      2    0.0%    0.0%  v8::internal::Scavenger::Process(v8::internal::OneshotBarrier*)
+      2    0.0%    0.0%  v8::internal::RootScavengeVisitor::VisitRootPointer(v8::internal::Root, v8::internal::Object**)
+      2    0.0%    0.0%  v8::internal::Heap::Scavenge()
+      2    0.0%    0.0%  v8::Value::IsInt32() const
+      2    0.0%    0.0%  v8::V8::DisposeGlobal(v8::internal::Object**)
+      2    0.0%    0.0%  uv_mutex_unlock
+      2    0.0%    0.0%  node::Buffer::Length(v8::Local<v8::Object>)
+      2    0.0%    0.0%  node::Binding(v8::FunctionCallbackInfo<v8::Value> const&)
+      1    0.0%    0.0%  v8::internal::StackFrame::GetCallerState(v8::internal::StackFrame::State*) const
+      1    0.0%    0.0%  v8::internal::Script::GetPositionInfo(int, v8::internal::Script::PositionInfo*, v8::internal::Script::OffsetFlag) const
+      1    0.0%    0.0%  v8::internal::Scavenger::ScavengePage(v8::internal::MemoryChunk*)
+      1    0.0%    0.0%  v8::internal::ScavengeJob::ScheduleIdleTaskIfNeeded(v8::internal::Heap*, int)
+      1    0.0%    0.0%  v8::internal::ParserBase<v8::internal::Parser>::ValidateExpression(bool*)
+      1    0.0%    0.0%  v8::internal::ParserBase<v8::internal::Parser>::ParseMemberExpression(bool*, bool*)
+      1    0.0%    0.0%  v8::internal::PagedSpace::SizeOfObjects()
+      1    0.0%    0.0%  v8::internal::OldSpaces::next()
+      1    0.0%    0.0%  v8::internal::NewSpace::UpdateAllocationInfo()
+      1    0.0%    0.0%  v8::internal::MemoryChunk::ReleaseAllocatedMemory()
+      1    0.0%    0.0%  v8::internal::MaybeHandle<v8::internal::Object> v8::internal::(anonymous namespace)::HandleApiCallHelper<false>(v8::internal::Isolate*, v8::internal::Handle<v8::internal::HeapObject>, v8::internal::Handle<v8::internal::HeapObject>, v8::internal::Handle<v8::internal::FunctionTemplateInfo>, v8::internal::Handle<v8::internal::Object>, v8::internal::BuiltinArguments)
+      1    0.0%    0.0%  v8::internal::Map::GetBackPointer() const
+      1    0.0%    0.0%  v8::internal::LookupIterator::PrepareTransitionToDataProperty(v8::internal::Handle<v8::internal::JSObject>, v8::internal::Handle<v8::internal::Object>, v8::internal::PropertyAttributes, v8::internal::Object::StoreFromKeyed)
+      1    0.0%    0.0%  v8::internal::LocalAllocationBuffer::Close()
+      1    0.0%    0.0%  v8::internal::Isolate::UnregisterTryCatchHandler(v8::TryCatch*)
+      1    0.0%    0.0%  v8::internal::Heap::GetFillToAlign(unsigned char*, v8::internal::AllocationAlignment)
+      1    0.0%    0.0%  v8::internal::HandleScopeImplementer::Iterate(v8::internal::RootVisitor*)
+      1    0.0%    0.0%  v8::internal::GlobalHandles::DispatchPendingPhantomCallbacks(bool)
+      1    0.0%    0.0%  v8::internal::GCTracer::Scope::~Scope()
+      1    0.0%    0.0%  v8::internal::Bitmap::Clear()
+      1    0.0%    0.0%  v8::internal::AstValueFactory::GetString(unsigned int, bool, v8::internal::Vector<unsigned char const>)
+      1    0.0%    0.0%  v8::internal::Accessors::FunctionPrototypeGetter(v8::Local<v8::Name>, v8::PropertyCallbackInfo<v8::Value> const&)
+      1    0.0%    0.0%  v8::internal::Accessors::FunctionLengthGetter(v8::Local<v8::Name>, v8::PropertyCallbackInfo<v8::Value> const&)
+      1    0.0%    0.0%  uv_mutex_lock
+      1    0.0%    0.0%  strchrnul
+      1    0.0%    0.0%  std::__detail::_Prime_rehash_policy::_M_next_bkt(unsigned long) const
+      1    0.0%    0.0%  node::cares_wrap::(anonymous namespace)::ChannelWrap::New(v8::FunctionCallbackInfo<v8::Value> const&)
+      1    0.0%    0.0%  node::NodePlatform::CallOnBackgroundThread(v8::Task*, v8::Platform::ExpectedRuntime)
+      1    0.0%    0.0%  fwrite
+      1    0.0%    0.0%  do_futex_wait.constprop.3
+      1    0.0%    0.0%  __GI___pthread_mutex_init
+
+ [Summary]:
+   ticks  total  nonlib   name
+   1035    0.5%    0.5%  JavaScript
+  187901   98.4%   99.1%  C++
+     46    0.0%    0.0%  GC
+   1374    0.7%          Shared libraries
+    631    0.3%          Unaccounted
+
+ [C++ entry points]:
+   ticks    cpp   total   name
+   2502   43.2%    1.3%  __pthread_cond_signal
+   1091   18.8%    0.6%  v8::internal::Builtin_HandleApiCall(int, v8::internal::Object**, v8::internal::Isolate*)
+    113    1.9%    0.1%  (anonymous namespace)::v8impl::FunctionCallbackWrapper::Invoke(v8::FunctionCallbackInfo<v8::Value> const&)
+    108    1.9%    0.1%  v8::External::Value() const
+     97    1.7%    0.1%  v8::internal::LookupIterator::PropertyOrElement(v8::internal::Isolate*, v8::internal::Handle<v8::internal::Object>, v8::internal::Handle<v8::internal::Object>, bool*, v8::internal::LookupIterator::Configuration)
+     79    1.4%    0.0%  v8::internal::String::IsUtf8EqualTo(v8::internal::Vector<char const>, bool)
+     76    1.3%    0.0%  v8::internal::Execution::Call(v8::internal::Isolate*, v8::internal::Handle<v8::internal::Object>, v8::internal::Handle<v8::internal::Object>, int, v8::internal::Handle<v8::internal::Object>*)
+     72    1.2%    0.0%  v8::internal::StringHasher::ComputeUtf8Hash(v8::internal::Vector<char const>, unsigned int, int*)
+     72    1.2%    0.0%  v8::internal::LookupIterator::State v8::internal::LookupIterator::LookupInRegularHolder<false>(v8::internal::Map*, v8::internal::JSReceiver*)
+     63    1.1%    0.0%  v8::internal::Map::FindRootMap() const
+     63    1.1%    0.0%  __GI___pthread_mutex_lock
+     60    1.0%    0.0%  v8::Isolate::GetCurrentContext()
+     56    1.0%    0.0%  (anonymous namespace)::v8impl::Unwrap(napi_env__*, napi_value__*, void**, (anonymous namespace)::v8impl::UnwrapAction) [clone .part.30]
+     51    0.9%    0.0%  (anonymous namespace)::v8impl::FunctionCallbackWrapper::Args(napi_value__**, unsigned long)
+     50    0.9%    0.0%  void v8::internal::LookupIterator::NextInternal<false>(v8::internal::Map*, v8::internal::JSReceiver*)
+     49    0.8%    0.0%  v8::Value::IsExternal() const
+     47    0.8%    0.0%  v8::internal::StringTable::LookupKey(v8::internal::Isolate*, v8::internal::StringTableKey*)
+     45    0.8%    0.0%  v8::Value::IsObject() const
+     43    0.7%    0.0%  napi_call_function
+     42    0.7%    0.0%  v8::internal::HashTable<v8::internal::StringTable, v8::internal::StringTableShape>::FindEntry(v8::internal::Isolate*, v8::internal::StringTableKey*)
+     40    0.7%    0.0%  node::fs::Read(v8::FunctionCallbackInfo<v8::Value> const&)
+     38    0.7%    0.0%  napi_get_cb_info
+     38    0.7%    0.0%  __GI___pthread_once
+     37    0.6%    0.0%  napi_get_reference_value
+     36    0.6%    0.0%  v8::TryCatch::TryCatch(v8::Isolate*)
+     36    0.6%    0.0%  strlen
+     35    0.6%    0.0%  node::fs::WriteBuffer(v8::FunctionCallbackInfo<v8::Value> const&)
+     33    0.6%    0.0%  v8::internal::JSTypedArray::GetBuffer()
+     33    0.6%    0.0%  v8::internal::JSObject::FastPropertyAt(v8::internal::Handle<v8::internal::JSObject>, v8::internal::Representation, v8::internal::FieldIndex)
+     31    0.5%    0.0%  v8::Function::Call(v8::Local<v8::Context>, v8::Local<v8::Value>, int, v8::Local<v8::Value>*)
+     31    0.5%    0.0%  napi_unwrap
+     27    0.5%    0.0%  v8::Value::IsFunction() const
+     26    0.4%    0.0%  v8::Value::IsArrayBufferView() const
+     24    0.4%    0.0%  v8::internal::LookupIterator::FetchValue() const [clone .part.49]
+     24    0.4%    0.0%  v8::ArrayBuffer::GetContents()
+     23    0.4%    0.0%  v8::internal::Factory::InternalizeUtf8String(v8::internal::Vector<char const>)
+     23    0.4%    0.0%  v8::Value::ToObject(v8::Local<v8::Context>) const
+     23    0.4%    0.0%  v8::Object::Get(v8::Local<v8::Context>, v8::Local<v8::Value>)
+     21    0.4%    0.0%  napi_get_named_property
+     20    0.3%    0.0%  v8::TryCatch::HasCaught() const
+     19    0.3%    0.0%  v8::Value::Int32Value() const
+     18    0.3%    0.0%  v8::Value::IsNumber() const
+     16    0.3%    0.0%  v8::internal::Logger::ApiEntryCall(char const*)
+     16    0.3%    0.0%  v8::internal::Isolate::RegisterTryCatchHandler(v8::TryCatch*)
+     16    0.3%    0.0%  v8::EscapableHandleScope::Escape(v8::internal::Object**)
+     15    0.3%    0.0%  v8::String::NewFromUtf8(v8::Isolate*, char const*, v8::NewStringType, int)
+     15    0.3%    0.0%  v8::HandleScope::Initialize(v8::Isolate*)
+     15    0.3%    0.0%  v8::HandleScope::CreateHandle(v8::internal::HeapObject*, v8::internal::Object*)
+     14    0.2%    0.0%  v8::TryCatch::~TryCatch()
+     14    0.2%    0.0%  v8::(anonymous namespace)::CallDepthScope<true>::~CallDepthScope() [clone .constprop.576]
+     14    0.2%    0.0%  v8::(anonymous namespace)::CallDepthScope<true>::CallDepthScope(v8::internal::Isolate*, v8::Local<v8::Context>)
+     13    0.2%    0.0%  v8::internal::Utf8StringKey::IsMatch(v8::internal::Object*)
+     13    0.2%    0.0%  uv_buf_init
+     13    0.2%    0.0%  node::fs::GetReqWrap(node::Environment*, v8::Local<v8::Value>)
+     12    0.2%    0.0%  v8::(anonymous namespace)::CallDepthScope<false>::CallDepthScope(v8::internal::Isolate*, v8::Local<v8::Context>)
+     12    0.2%    0.0%  _init
+     11    0.2%    0.0%  void v8::internal::LookupIterator::Start<false>()
+     11    0.2%    0.0%  v8::internal::Isolate::FireCallCompletedCallback()
+     11    0.2%    0.0%  v8::Object::InternalFieldCount()
+     11    0.2%    0.0%  uv_fs_read
+     10    0.2%    0.0%  v8::internal::Runtime::GetObjectProperty(v8::internal::Isolate*, v8::internal::Handle<v8::internal::Object>, v8::internal::Handle<v8::internal::Object>, bool*)
+      9    0.2%    0.0%  v8::ArrayBufferView::ByteLength()
+      9    0.2%    0.0%  uv_fs_write
+      8    0.1%    0.0%  v8::HandleScope::~HandleScope()
+      8    0.1%    0.0%  __GI___pthread_getspecific
+      7    0.1%    0.0%  v8::Value::Uint32Value() const
+      7    0.1%    0.0%  uv__work_submit
+      6    0.1%    0.0%  v8::internal::TimerEventScope<v8::internal::TimerEventExecute>::LogTimerEvent(v8::internal::Logger::StartEnd)
+      6    0.1%    0.0%  v8::internal::Object::GetProperty(v8::internal::LookupIterator*)
+      6    0.1%    0.0%  v8::ArrayBufferView::Buffer()
+      5    0.1%    0.0%  v8::Value::IntegerValue() const
+      5    0.1%    0.0%  __lll_unlock_wake
+      4    0.1%    0.0%  v8::internal::ThreadId::GetCurrentThreadId()
+      4    0.1%    0.0%  v8::internal::SaveContext::~SaveContext()
+      4    0.1%    0.0%  v8::internal::SaveContext::SaveContext(v8::internal::Isolate*)
+      4    0.1%    0.0%  v8::EscapableHandleScope::EscapableHandleScope(v8::Isolate*)
+      4    0.1%    0.0%  v8::ArrayBufferView::ByteOffset()
+      3    0.1%    0.0%  v8::internal::Runtime_CompileLazy(int, v8::internal::Object**, v8::internal::Isolate*)
+      3    0.1%    0.0%  v8::Locker::IsActive()
+      3    0.1%    0.0%  node::fs::FSReqWrap::SetReturnValue(v8::FunctionCallbackInfo<v8::Value> const&)
+      3    0.1%    0.0%  node::Buffer::Data(v8::Local<v8::Object>)
+      2    0.0%    0.0%  v8::internal::Runtime_StoreIC_Miss(int, v8::internal::Object**, v8::internal::Isolate*)
+      2    0.0%    0.0%  v8::internal::Runtime_DeserializeLazy(int, v8::internal::Object**, v8::internal::Isolate*)
+      2    0.0%    0.0%  v8::internal::LookupIterator::GetDataValue() const
+      2    0.0%    0.0%  v8::Value::IsInt32() const
+      2    0.0%    0.0%  node::Buffer::Length(v8::Local<v8::Object>)
+      1    0.0%    0.0%  v8::internal::Runtime_LoadIC_Miss(int, v8::internal::Object**, v8::internal::Isolate*)
+      1    0.0%    0.0%  v8::internal::Runtime_GetOwnPropertyDescriptor(int, v8::internal::Object**, v8::internal::Isolate*)
+      1    0.0%    0.0%  v8::internal::Runtime_CompileOptimized_Concurrent(int, v8::internal::Object**, v8::internal::Isolate*)
+      1    0.0%    0.0%  v8::internal::Runtime_AllocateInNewSpace(int, v8::internal::Object**, v8::internal::Isolate*)
+      1    0.0%    0.0%  v8::internal::MaybeHandle<v8::internal::Object> v8::internal::(anonymous namespace)::HandleApiCallHelper<false>(v8::internal::Isolate*, v8::internal::Handle<v8::internal::HeapObject>, v8::internal::Handle<v8::internal::HeapObject>, v8::internal::Handle<v8::internal::FunctionTemplateInfo>, v8::internal::Handle<v8::internal::Object>, v8::internal::BuiltinArguments)
+      1    0.0%    0.0%  v8::internal::Map::IsUnboxedDoubleField(v8::internal::FieldIndex) const
+      1    0.0%    0.0%  v8::internal::JSObject::GetHeaderSize(v8::internal::InstanceType, bool)
+      1    0.0%    0.0%  v8::internal::Isolate::UnregisterTryCatchHandler(v8::TryCatch*)
+      1    0.0%    0.0%  v8::base::Thread::GetThreadLocal(int)
+      1    0.0%    0.0%  v8::(anonymous namespace)::CallDepthScope<false>::~CallDepthScope() [clone .constprop.574]
+
+ [Bottom up (heavy) profile]:
+  Note: percentage shows a share of a particular caller in the total
+  amount of its parent calls.
+  Callers occupying less than 1.0% are not shown.
+
+   ticks parent  name
+  178639   93.6%  syscall
+
+   2504    1.3%  __pthread_cond_signal
+   1283   51.2%    LazyCompile: *FileSource.pull /home/jeremiah/Documents/bob/fs/file-source.js:89:37
+   1277   99.5%      Stub: CallApiCallbackStub
+   1277  100.0%        LazyCompile: *fs.write /home/jeremiah/Documents/bob/fs/file-sink.js:128:46
+   1277  100.0%          LazyCompile: *wrapper fs.js:852:19
+   1216   48.6%    LazyCompile: *next /home/jeremiah/Documents/bob/fs/file-sink.js:111:41
+   1214   99.8%      Stub: CallApiCallbackStub {1}
+   1214  100.0%        LazyCompile: *fs.read /home/jeremiah/Documents/bob/fs/file-source.js:128:56
+   1214  100.0%          LazyCompile: *wrapper fs.js:814:19
+
