@@ -15,10 +15,11 @@ class Sink {
     this.source = source
     this.bindCb = bindCb
 
+    // Critically important
     this.source.bindSink(this)
 
     // possibly start reading
-    this._read()
+    this.doPull()
   }
 
   next (status, error, buffer, bytes) {
@@ -33,17 +34,19 @@ class Sink {
       return bindCb(error)
     }
 
-    // write or process buffer
+    // write or process buffer here
 
+    // if there was an error writing or processing the buffer...
     if (sinkError) {
       return this.source.pull(error)
     }
 
-    this._read()
+    // pull again
+    this.doPull()
   }
 
   // unecessary but de-duplicates code, not considered "sink api"
-  _read() {
+  doPull() {
     // sink handles buffer allocation
     const buffer = new Buffer(0)
 

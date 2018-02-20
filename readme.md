@@ -33,7 +33,7 @@ The Protocol must be simple:
 
 ## Project Layout
 
-API examples (sometimes functional) sit in the top-level directory.
+API reference examples sit in the top-level directory and are prefixed by `reference-`. The reference passthrough should be functional.
 
 Functional sources, sinks, and combinations relating to Node.js subsystems sit in subsystem-named directories. Examples include `/fs/` and `/stdio/`.
 
@@ -42,7 +42,10 @@ Functional sources, sinks, and combinations relating to Node.js subsystems sit i
 Tests sit in the `/test/` directory.
 For more information, see the [tests readme](tests/readme.md).
 
+### Performance
+
+Please see [performance.md](performance.md) for profiling results & information.
+
 ## License
 
-[MIT Licensed](license)
-_[Contributions via DCO 1.1](contributing.md#developers-certificate-of-origin)_
+[MIT Licensed](license) — _[Contributions via DCO 1.1](contributing.md#developers-certificate-of-origin)_

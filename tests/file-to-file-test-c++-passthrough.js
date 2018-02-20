@@ -2,7 +2,7 @@
 
 const FileSource = require('../fs/file-source')
 const FileSink = require('../fs/file-sink')
-const PassThrough = require('../reference-passthrough')
+const PassThrough = require('../addon/build/Release/addon')
 
 const fileSource = new FileSource(process.argv[2])
 const fileSink = new FileSink(process.argv[2] + '_')

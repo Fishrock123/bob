@@ -14,7 +14,7 @@ Notes:
 
 ## Profiles
 
-### `file-to-file-test.js` with JS PassThrough
+### `file-to-file-test.js` _(with JS PassThrough)_
 
 [Profile using 38GB file](profiles/f2f-bob-big-prof)
 
@@ -24,7 +24,7 @@ Output from `/usr/bin/time`:
 72205056inputs+74950112outputs (1major+12411minor)pagefaults 0swaps
 ```
 
-### `file-to-file-test.js` with C++ PassThrough
+### `file-to-file-test-c++-passthrough.js`
 
 [Profile using 38GB file](profiles/f2f-bob-c++-big-prof)
 
@@ -34,7 +34,7 @@ Output from `/usr/bin/time`:
 72204632inputs+74950616outputs (1major+12268minor)pagefaults 0swaps
 ```
 
-### `file-to-file-test-old.js` (Streams3)
+### `file-to-file-test-streams3.js`
 
 [Profile using 38GB file](profiles/f2f-streams3-big-prof)
 
