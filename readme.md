@@ -4,6 +4,17 @@ A Work-In-Progress binary data "streams+" implementation via data producers, dat
 
 _The name? something something B~~L~~OB, credit Matteo Collina._
 
+## Project Approach
+This is [a Node.js strategic initiative](strategic-initiatives) aiming to improve Node.js streaming data interfaces, both within Node.js core internally, and hopefully also as future public APIs.
+
+High-level timeline:
+- Prototype separate from core entirely.
+- Move into nodejs org once JS & C++ APIs are significantly prototyped.
+- Begin transitioning Node.js internals once the APIs and perf are proved.
+- If an internal transition works out well, begin planning public APIs.
+
+All of these steps necessitate the buy-in of many stakeholders, both in Node.js core and the greater Node.js ecosystem. This is a long-term project by necessity and design.
+
 ## Goals
 Some collective goals for this initiative.
 
@@ -49,3 +60,5 @@ Please see [performance.md](performance.md) for profiling results & information.
 ## License
 
 [MIT Licensed](license) — _[Contributions via DCO 1.1](contributing.md#developers-certificate-of-origin)_
+
+[strategic-initiatives]: https://github.com/nodejs/TSC/blob/master/Strategic-Initiatives.md#current-initiatives
