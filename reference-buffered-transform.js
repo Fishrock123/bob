@@ -1,6 +1,7 @@
 'use strict'
 
 const { Buffer } = require('buffer')
+const status_type = require('../status-enum')
 
 class BufferedTransform {
   constructor (bufferSize, reallocateSize) {
@@ -28,7 +29,7 @@ class BufferedTransform {
     if (error !== null) {
       return this.sink.next(status, error)
     }
-    if (status === 'end') {
+    if (status === status_type.end) {
       if (this._bytes === 0) {
         return this.sink.next(status)
       }
@@ -49,7 +50,7 @@ class BufferedTransform {
     buffer.copy(this._buffer, this._bytes, 0, bytes)
     this._bytes += bytes
 
-    if (status === 'continue') {
+    if (status === status_type.continue) {
       return this.source.pull(null, buffer)
     }
   }
@@ -60,14 +61,14 @@ class BufferedTransform {
     }
 
     if (this._readPos >= this._bytes) {
-      this.sink.next('end')
+      this.sink.next(status_type.end)
     }
 
     this._buffer.copy(buffer, 0, this._readPos)
 
     this._readPos += buffer.length
 
-    this.sink.next('continue', null, buffer, buffer.length)
+    this.sink.next(status_type.continue, null, buffer, buffer.length)
   }
 }
 

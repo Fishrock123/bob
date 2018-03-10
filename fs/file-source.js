@@ -8,6 +8,7 @@ const internalURL = require('internal/url');
 const assertEncoding = internalFS.assertEncoding;
 const getPathFromURL = internalURL.getPathFromURL;
 const fs = require('fs')
+const status_type = require('../status-enum')
 
 const kMinPoolSpace = 128;
 
@@ -56,7 +57,7 @@ function FileSource(path, options) {
       this.end = Infinity;
     } else if (typeof this.end !== 'number') {
       throw new errors.TypeError('ERR_INVALID_ARG_TYPE',
-                                 'end',
+                                 status_type.end,
                                  'number',
                                  this.end);
     }
@@ -75,7 +76,7 @@ function FileSource(path, options) {
   // if (typeof this.fd !== 'number')
   //   this.open();
 
-  // this.on('end', function() {
+  // this.on(status_type.end, function() {
   //   if (this.autoClose) {
   //     this.destroy();
   //   }
@@ -92,20 +93,20 @@ FileSource.prototype.pull = function(error, buffer) {
       fs.close(this.fd, (closeError) => {
         this.fd = null
         if (closeError) {
-          this.sink.next('error', closeError)
+          this.sink.next(status_type.error, closeError, Buffer.alloc(0), 0)
         } else {
-          this.sink.next('error', error)
+          this.sink.next(status_type.error, error, Buffer.alloc(0), 0)
         }
       })
     } else {
-      return this.sink.next('error', error)
+      return this.sink.next(status_type.error, error, Buffer.alloc(0), 0)
     }
   }
 
   if (typeof this.fd !== 'number') {
     fs.open(this.path, this.flags, this.mode, (error, fd) => {
       if (error) {
-        return this.sink.next('error', error)
+        return this.sink.next(status_type.error, error, Buffer.alloc(0), 0)
       }
 
       this.fd = fd
@@ -130,22 +131,22 @@ FileSource.prototype._read = function(buffer) {
       fs.close(this.fd, (closeError) => {
         this.fd = null
         if (closeError) {
-          this.sink.next('error', closeError)
+          this.sink.next(status_type.error, closeError, Buffer.alloc(0), 0)
         } else {
-          this.sink.next('error', error)
+          this.sink.next(status_type.error, error, Buffer.alloc(0), 0)
         }
       })
     } else {
       if (bytesRead > 0) {
         this.pos += bytesRead;
-        this.sink.next('continue', null, buffer, bytesRead)
+        this.sink.next(status_type.continue, null, buffer, bytesRead)
       } else {
         fs.close(this.fd, (closeError) => {
           this.fd = null
           if (closeError) {
-            this.sink.next('error', closeError)
+            this.sink.next(status_type.error, closeError, Buffer.alloc(0), 0)
           } else {
-            this.sink.next('end', null, buffer, -1)
+            this.sink.next(status_type.end, null, buffer, 0)
           }
         })
       }

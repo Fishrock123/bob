@@ -1,5 +1,7 @@
 'use strict'
 
+const status_type = require('../status-enum')
+
 class Source {
   constructor () {
     this.sink = null
@@ -14,14 +16,14 @@ class Source {
     // error MUST be null or an error
     // buffer MUST be a Buffer
     if (error || sourceError) {
-      return this.sink.next('error', error)
+      return this.sink.next(status_type.error, error)
     }
 
     // read into buffer
     if (more) {
-      this.sink.next('continue', null, buffer, bytesWritten)
+      this.sink.next(status_type.continue, null, buffer, bytesWritten)
     } else {
-      this.sink.next('end', null, buffer, bytesWritten)
+      this.sink.next(status_type.end, null, buffer, bytesWritten)
     }
   }
 }

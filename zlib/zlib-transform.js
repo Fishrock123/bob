@@ -16,6 +16,8 @@ const {
   kMaxLength
 } = require('buffer');
 
+const status_type = require('../status-enum')
+
 const constants = process.binding('constants').zlib;
 const {
   Z_NO_FLUSH, Z_BLOCK, Z_PARTIAL_FLUSH, Z_SYNC_FLUSH, Z_FULL_FLUSH, Z_FINISH,
@@ -236,8 +238,8 @@ class ZlibTransform {
   //   } else if (ws.ending) {
   //     // TODO: Should be this._closed? is this even relevent anymore?
   //     // if (callback)
-  //       // TODO: 'listen' for this.sink.next('end')?
-  //       // this.once('end', callback);
+  //       // TODO: 'listen' for this.sink.next(status_type.end)?
+  //       // this.once(status_type.end, callback);
   //   } else if (ws.needDrain) {
   //     // TODO: keep this state?
   //     const alreadyHadFlushScheduled = this._scheduledFlushFlag !== Z_NO_FLUSH;
@@ -265,7 +267,7 @@ class ZlibTransform {
       this.close()
       return this.sink.next(status, error)
     }
-    if (status === 'end') {
+    if (status === status_type.end) {
       this._ended = true
     }
     if (buffer === null) buffer = Buffer.alloc(0)
@@ -278,8 +280,8 @@ class ZlibTransform {
     var flushFlag;
     var ws = {} //this._writableState;
     // if ((ws.ending || ws.ended) && ws.length === chunk.byteLength) {
-    if (status === 'end') {
-      // XXX: Should be on 'end' message?
+    if (status === status_type.end) {
+      // XXX: Should be on status_type.end message?
       flushFlag = this._finishFlushFlag;
     } else {
       flushFlag = this._flushFlag;
@@ -301,7 +303,7 @@ class ZlibTransform {
         return this.sink.next(status, error)
       }
 
-      if (status === 'end') return
+      if (status === status_type.end) return
 
       if (pullMore) this.source.pull(null, Buffer.alloc(1024 * 16))
     }
@@ -334,7 +336,7 @@ class ZlibTransform {
     // buffer.copy(this._buffer, this._bytes, 0, bytes)
     // this._bytes += bytes
     //
-    // if (status === 'continue') {
+    // if (status === status_type.continue) {
     //   return this.source.pull(null, buffer)
     // }
   }
@@ -359,7 +361,7 @@ class ZlibTransform {
     }
 
     if (this._ended) {
-      this.sink.next('end', null, Buffer.alloc(0), 0)
+      this.sink.next(status_type.end, null, Buffer.alloc(0), 0)
       return
     }
 
@@ -367,14 +369,14 @@ class ZlibTransform {
     // }
 
     // if (this._readPos >= this._bytes) {
-    //   this.sink.next('end')
+    //   this.sink.next(status_type.end)
     // }
 
     // this._buffer.copy(buffer, 0, this._readPos)
     //
     // this._readPos += buffer.length
     //
-    // this.sink.next('continue', null, buffer, buffer.length)
+    // this.sink.next(status_type.continue, null, buffer, buffer.length)
   }
 }
 
@@ -390,7 +392,7 @@ function zlibOnError(message, errno) {
   error.code = codes[errno];
   // XXX: propogate the error up
   self.source.pull(error, null)
-  // self.emit('error', error);
+  // self.emit(status_type.error, error);
 }
 
 function _close(engine, callback) {
@@ -436,7 +438,7 @@ function processCallback() {
 
     pullMore = false
 
-    self.sink.next('continue', null, out, out.length)
+    self.sink.next(status_type.continue, null, out, out.length)
   } else if (have < 0) {
     assert(false, 'have should not go down');
   }
@@ -461,7 +463,7 @@ function processCallback() {
     self._pullFromHandle = true
 
     if (have === 0) {
-      self.sink.next('continue', null, Buffer.alloc(0), 0)
+      self.sink.next(status_type.continue, null, Buffer.alloc(0), 0)
     }
 
     return;

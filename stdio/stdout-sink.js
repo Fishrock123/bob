@@ -1,6 +1,7 @@
 'use strict'
 
 const { Buffer } = require('buffer')
+const status_type = require('../status-enum')
 
 class StdoutSink {
   constructor () {
@@ -28,7 +29,7 @@ class StdoutSink {
   }
 
   next (status, error, buffer, bytes) {
-    if (status === 'end') return
+    if (status === status_type.end) return
     if (error) bindCb(error)
 
     process.stdout.write(buffer.slice(0, bytes))

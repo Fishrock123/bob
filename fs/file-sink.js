@@ -8,6 +8,7 @@ const internalURL = require('internal/url');
 const assertEncoding = internalFS.assertEncoding;
 const getPathFromURL = internalURL.getPathFromURL;
 const fs = require('fs')
+const status_type = require('../status-enum')
 
 const kMinPoolSpace = 128;
 
@@ -84,7 +85,7 @@ FileSink.prototype.sink = function () {
   if (typeof this.fd !== 'number') {
     fs.open(this.path, this.flags, this.mode, (error, fd) => {
       if (error) {
-        this.source.pull(error)
+        this.source.pull(error, Buffer.alloc(0))
       }
 
       this.fd = fd
@@ -109,10 +110,15 @@ FileSink.prototype._read = function _read () {
 }
 
 FileSink.prototype.next = function next (status, error, _buf, bytes) {
-  if (status === 'end') {
+  if (status === undefined) {
+    this.source.pull(new Error('undefined status'), Buffer.alloc(0))
+    return
+  }
+
+  if (status === status_type.end) {
     return fs.close(this.fd, (closeError) => {
       if (closeError) {
-        this.source.pull(closeError)
+        this.source.pull(closeError, Buffer.alloc(0))
       }
       this.bindCb()
     })
@@ -120,7 +126,7 @@ FileSink.prototype.next = function next (status, error, _buf, bytes) {
   if (error) {
     return fs.close(this.fd, (closeError) => {
       if (closeError) {
-        this.source.pull(closeError)
+        this.source.pull(closeError, Buffer.alloc(0))
       }
       this.bindCb(error)
     })
@@ -134,7 +140,7 @@ FileSink.prototype.next = function next (status, error, _buf, bytes) {
 
   fs.write(this.fd, buf, 0, bytes, this.pos, (er, bytesWritten) => {
     if (error) {
-      this.source.pull(error)
+      this.source.pull(error, Buffer.alloc(0))
     } else {
       if (bytesWritten > 0) {
         this.pos += bytesWritten;
