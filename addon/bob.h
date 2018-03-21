@@ -5,24 +5,16 @@ enum Status {
   ERROR = -1,
   END = 0,
   CONTINUE = 1
-}
-
-class Sink;
-
-class Source {
- public:
-  virtual ~Source() {}
-
-  virtual void BindSink(Sink* sink);
-  virtual void Pull(void** error, char* data, size_t size);
 };
 
-class Sink {
+class Bob_Base {
  public:
-  virtual ~Sink() {}
+  virtual ~Bob_Base();
 
-  virtual Sink* BindSource(Source* source);
-  virtual void Next(int status, void** error, char* data, size_t bytes);
+  virtual Bob_Base* BindSource(Bob_Base* source) = 0;
+  virtual void BindSink(Bob_Base* sink) = 0;
+  virtual void Next(int status, void** error, char* data, size_t bytes) = 0;
+  virtual void Pull(void** error, char* data, size_t size) = 0;
 };
 
 #endif  // BOB_H_

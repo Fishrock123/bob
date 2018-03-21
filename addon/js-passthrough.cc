@@ -27,28 +27,30 @@ void PassThrough::Destructor(napi_env env, void* nativeObject, void* /*finalize_
   delete static_cast<PassThrough*>(nativeObject);
 }
 
-// TODO: C++ only binding
 //
-// Sink* PassThrough::BindSource(Source* source) {
-//   if (js_source_ != nullptr) {
-//     printf("Should not bind from C++ when there is js_source_\n");
-//     return this;
-//   }
+//  C++ only binding
 //
-//   source->BindSink(this);
-//   source_ = reinterpret_cast<PassThrough*>(source);
-//
-//   return this;
-// }
-//
-// void PassThrough::BindSink(Sink* sink) {
-//   if (js_sink_ != nullptr) {
-//     printf("Should not bind from C++ when there is js_sink_\n");
-//     return;
-//   }
-//
-//   sink_ = reinterpret_cast<PassThrough*>(sink);
-// }
+
+Bob_Base* PassThrough::BindSource(Bob_Base* source) {
+  if (js_source_ != nullptr) {
+    printf("Should not bind from C++ when there is js_source_\n");
+    return this;
+  }
+
+  source->BindSink(static_cast<Bob_Base*>(this));
+  source_ = source;
+
+  return this;
+}
+
+void PassThrough::BindSink(Bob_Base* sink) {
+  if (js_sink_ != nullptr) {
+    printf("Should not bind from C++ when there is js_sink_\n");
+    return;
+  }
+
+  sink_ = sink;
+}
 
 //
 // C++ API
@@ -266,7 +268,7 @@ napi_value PassThrough::BindSource(napi_env env, napi_callback_info info) {
   assert(status == napi_ok);
 
   // Bind to the C++ API if it is available.
-  PassThrough* source_obj;
+  Bob_Base* source_obj;
   status = napi_unwrap(env, source, reinterpret_cast<void**>(&source_obj));
   if (source_obj != nullptr && status == napi_ok) {
     printf("bound c++ source!\n");
@@ -301,7 +303,7 @@ napi_value PassThrough::BindSink(napi_env env, napi_callback_info info) {
   assert(status == napi_ok);
 
   // Bind to the C++ API if it is available.
-  PassThrough* sink_obj;
+  Bob_Base* sink_obj;
   status = napi_unwrap(env, argv[0], reinterpret_cast<void**>(&sink_obj));
   if (sink_obj != nullptr && status == napi_ok) {
     printf("bound c++ sink!\n");
