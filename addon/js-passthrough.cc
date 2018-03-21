@@ -11,6 +11,7 @@ PassThrough::PassThrough()
       js_sink_(nullptr),
       env_(nullptr),
       wrapper_(nullptr),
+      buf_ref_(nullptr),
       source_(nullptr),
       sink_(nullptr) {}
 
@@ -76,7 +77,6 @@ void PassThrough::Next(int bob_status, void** error, char* data, size_t bytes) {
 
     // If we had data from a JS buffer previously (probably) we need to free it.
     if (buf_ref_ != nullptr) {
-      // XXX: Sometimes this can segfault with EXC_BAD_ACCESS
       status = napi_delete_reference(env_, buf_ref_);
       assert(status == napi_ok);
       buf_ref_ = nullptr;
@@ -135,7 +135,6 @@ void PassThrough::Pull(void** error, char* data, size_t size) {
 
     // If we had data from a JS buffer previously (probably) we need to free it.
     if (buf_ref_ != nullptr) {
-      // XXX: Sometimes this can segfault with EXC_BAD_ACCESS
       status = napi_delete_reference(env_, buf_ref_);
       assert(status == napi_ok);
       buf_ref_ = nullptr;
