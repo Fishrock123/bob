@@ -2,6 +2,7 @@ node_modules
 build
 
 tests/fixtures/test_
+tests/fixtures/test-simple_
 
 *.gz
 *.log
