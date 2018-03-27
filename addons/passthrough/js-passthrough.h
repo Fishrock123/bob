@@ -2,9 +2,9 @@
 #define JS_PASSTHROUGH_H_
 
 #include <node_api.h>
-#include "bob.h"
+#include "../bob.h"
 
-class PassThrough : Bob_Base {
+class PassThrough : public Bob_Base {
  public:
   PassThrough();
   virtual ~PassThrough();

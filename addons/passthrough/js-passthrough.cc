@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include "js-passthrough.h"
-#include "utils-inl.h"
+#include "../utils-inl.h"
 
 napi_ref PassThrough::constructor;
 
@@ -65,6 +65,10 @@ void PassThrough::Next(int bob_status, void** error, char* data, size_t bytes) {
   } else if (js_sink_ != nullptr) {
     napi_status status;
 
+    napi_handle_scope scope;
+    status = napi_open_handle_scope(env_, &scope);
+    assert(status == napi_ok);
+
     napi_value sink;
     status = napi_get_reference_value(env_, js_sink_, &sink);
     assert(status == napi_ok);
@@ -92,10 +96,17 @@ void PassThrough::Next(int bob_status, void** error, char* data, size_t bytes) {
     status = napi_create_int32(env_, bytes, &js_bytes);
     assert(status == napi_ok);
 
+    napi_value js_error;
+    if (*error != nullptr) {
+      js_error = reinterpret_cast<napi_value>(*error);
+    } else {
+      napi_get_undefined(env_, &js_error);
+    }
+
     size_t argc = 4;
     const napi_value argv[] = {
       js_status,
-      reinterpret_cast<napi_value>(*error),
+      js_error,
       buffer,
       js_bytes
     };
@@ -107,6 +118,9 @@ void PassThrough::Next(int bob_status, void** error, char* data, size_t bytes) {
                                 argc,
                                 argv,
                                 nullptr);
+    assert(status == napi_ok);
+
+    status = napi_close_handle_scope(env_, scope);
     assert(status == napi_ok);
 
   } else {
@@ -122,6 +136,10 @@ void PassThrough::Pull(void** error, char* data, size_t size) {
   // If we have bound to the JS API
   } else if (js_source_ != nullptr) {
     napi_status status;
+
+    napi_handle_scope scope;
+    status = napi_open_handle_scope(env_, &scope);
+    assert(status == napi_ok);
 
     napi_value source;
     status = napi_get_reference_value(env_, js_source_, &source);
@@ -155,6 +173,9 @@ void PassThrough::Pull(void** error, char* data, size_t size) {
                                 argc,
                                 argv,
                                 nullptr);
+    assert(status == napi_ok);
+
+    status = napi_close_handle_scope(env_, scope);
     assert(status == napi_ok);
 
   } else {
