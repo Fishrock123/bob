@@ -2,7 +2,13 @@
   "targets": [
     {
       "target_name": "addon",
-      "sources": [ "addon.cc", "fs-source.cc" ]
+      'include_dirs': [
+        '.'
+      ],
+      "sources": [
+        "addon.cc",
+        "fs-source.cc"
+      ]
     }
   ]
 }
