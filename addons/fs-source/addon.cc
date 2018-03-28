@@ -42,7 +42,7 @@ napi_value SetupBind(napi_env env, napi_callback_info cb_info) {
     FS_Source* source = new FS_Source(loop,
                                       buf,
                                       O_RDONLY,
-                                      0x2010);
+                                      0x1B6);
 
     printf("bound c++ sink!\n");
     sink->BindSource(static_cast<Bob_Base*>(source));
