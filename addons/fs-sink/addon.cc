@@ -42,7 +42,8 @@ napi_value SetupBind(napi_env env, napi_callback_info cb_info) {
     FS_Sink* sink = new FS_Sink(loop,
                                 buf,
                                 O_WRONLY | O_CREAT,
-                                0x1B6);
+                                0x1B6,
+                                16 * 1024);
 
     printf("bound c++ sink!\n");
     sink->BindSource(source);

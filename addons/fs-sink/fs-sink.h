@@ -6,7 +6,7 @@
 
 class FS_Sink : public Bob_Base {
  public:
-  FS_Sink(uv_loop_t* loop, const char* path, int flags, int mode);
+  FS_Sink(uv_loop_t* loop, const char* path, int flags, int mode, uint32_t bufsize);
   virtual ~FS_Sink();
 
   virtual Bob_Base* BindSource(Bob_Base* source);
@@ -26,7 +26,7 @@ class FS_Sink : public Bob_Base {
   uv_file fd_;
   int64_t pos_;
 
-  // char* tmpdata_;
+  uv_buf_t buf_;
 };
 
 #endif  // FS_SOURCE_H_

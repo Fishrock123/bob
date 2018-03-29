@@ -4,7 +4,7 @@
 #include "fs-sink.h"
 #include "../utils-inl.h"
 
-FS_Sink::FS_Sink(uv_loop_t* loop, const char* path, int flags, int mode)
+FS_Sink::FS_Sink(uv_loop_t* loop, const char* path, int flags, int mode, uint32_t bufsize)
     : source_(nullptr),
       loop_(loop),
       path_(path),
@@ -12,10 +12,13 @@ FS_Sink::FS_Sink(uv_loop_t* loop, const char* path, int flags, int mode)
       mode_(mode),
       req_(),
       fd_(-1),
-      pos_(0) {}
+      pos_(0) {
+  buf_ = uv_buf_init(new char[bufsize], bufsize);
+}
 
 FS_Sink::~FS_Sink() {
   delete[] path_;
+  delete[] buf_.base;
 }
 
 //
@@ -82,18 +85,13 @@ void FS_Sink::Next(int bob_status, void** error, char* data, size_t bytes) {
       uv_fs_close(self->loop_, &self->req_, self->fd_, [](uv_fs_t* req) -> void {
         FS_Sink* self = static_cast<FS_Sink*>(req->data);
         self->fd_ = -1;
+        uv_fs_req_cleanup(req);
       });
-      uv_fs_req_cleanup(req);
       return;
     }
 
     void* error_data = nullptr;
-
-    // I'm sure Node.js already has some sort of managed memory allocator
-    // and I don't feel like writing one today.
-    char* new_data = new char[16 * 1024];
-
-    self->source_->Pull(&error_data, new_data, 16 * 1024);
+    self->source_->Pull(&error_data, self->buf_.base, self->buf_.len);
   });
 }
 
@@ -104,10 +102,5 @@ void FS_Sink::Pull(void** error, char* data, size_t size) {
 
 void FS_Sink::Start() {
   void* error_data = nullptr;
-
-  // I'm sure Node.js already has some sort of managed memory allocator
-  // and I don't feel like writing one today.
-  char* new_data = new char[16 * 1024];
-
-  source_->Pull(&error_data, new_data, 16 * 1024);
+  source_->Pull(&error_data, buf_.base, buf_.len);
 }
