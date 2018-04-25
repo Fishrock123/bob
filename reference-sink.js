@@ -19,8 +19,11 @@ class Sink {
     // Critically important
     this.source.bindSink(this)
 
-    // possibly start reading
-    this.doPull()
+    // start reading
+    // sink handles buffer allocation
+    const buffer = new Buffer(0)
+
+    this.source.pull(null, buffer)
   }
 
   next (status, error, buffer, bytes) {
@@ -43,11 +46,6 @@ class Sink {
     }
 
     // pull again
-    this.doPull()
-  }
-
-  // unecessary but de-duplicates code, not considered "sink api"
-  doPull() {
     // sink handles buffer allocation
     const buffer = new Buffer(0)
 

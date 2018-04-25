@@ -4,8 +4,33 @@ A Work-In-Progress binary data "streams+" implementation via data producers, dat
 
 _The name? something something B~~L~~OB, credit Matteo Collina._
 
-## Project Approach
 This is [a Node.js strategic initiative](strategic-initiatives) aiming to improve Node.js streaming data interfaces, both within Node.js core internally, and hopefully also as future public APIs.
+
+## API Reference
+
+The following files serve as the API's reference:
+- A [Source](reference-source.js) - _The data provider_
+- A [Sink](reference-sink.js) - _The data consumer_
+- A [Passthrough](reference-passthrough.js) - _A good example of the whole API_
+- A [Buffered Transform](reference-buffered-transform.js) - _An example of buffering_
+
+The composition of the classes looks like this:
+```js
+const source = new Source(/* args */)
+const sink = new Sink(/* args */)
+
+sink.bindSource(source, error => {
+  // The stream is finished when this is called.
+})
+```
+
+## Performance
+
+Please see [performance.md](performance.md) for profiling results & information.
+
+Current results estimate a 30% decrease of CPU time in bad cases, and up to 8x decrease in good cases. This should correlate to overall throughput but may not be exact.
+
+## Project Approach
 
 High-level timeline:
 - Prototype separate from core entirely.
@@ -52,10 +77,6 @@ Functional sources, sinks, and combinations relating to Node.js subsystems sit i
 
 Tests sit in the `/test/` directory.
 For more information, see the [tests readme](tests/readme.md).
-
-### Performance
-
-Please see [performance.md](performance.md) for profiling results & information.
 
 ## License
 
