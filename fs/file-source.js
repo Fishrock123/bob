@@ -3,9 +3,8 @@
 // Flags: --expose-internals
 
 const errors = require('internal/errors');
-const internalFS = require('internal/fs');
 const internalURL = require('internal/url');
-const assertEncoding = internalFS.assertEncoding;
+const  { assertEncoding } = require('internal/fs/utils')
 const getPathFromURL = internalURL.getPathFromURL;
 const fs = require('fs')
 const status_type = require('../status-enum')
