@@ -1,5 +1,7 @@
 'use strict'
 
+// node file-to-file-test-streams3.js ./fixtures/test
+
 const fs = require('fs')
 const stream = require('stream')
 

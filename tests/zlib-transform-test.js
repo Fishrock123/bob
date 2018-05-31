@@ -1,5 +1,7 @@
 'use strict'
 
+// node --expose-internals zlib-transform-test.js ./fixtures/test
+
 const zlib = require('zlib')
 
 const FileSource = require('../fs/file-source')

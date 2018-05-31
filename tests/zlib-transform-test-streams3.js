@@ -1,5 +1,7 @@
 'use strict'
 
+// node zlib-transform-test-streams3.js ./fixtures/test
+
 const fs = require('fs')
 const zlib = require('zlib')
 

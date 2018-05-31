@@ -1,5 +1,7 @@
 'use strict'
 
+// node --expose-internals file-to-file-test-c++-passthrough.js ./fixtures/test
+
 const FileSource = require('../fs/file-source')
 const FileSink = require('../fs/file-sink')
 const PassThrough = require('../addons/passthrough/build/Release/addon')

@@ -74,7 +74,20 @@ API reference examples sit in the top-level directory and are prefixed by `refer
 
 Functional sources, sinks, and combinations relating to Node.js subsystems sit in subsystem-named directories. Examples include `/fs/` and `/stdio/`.
 
-### Tests
+### Development
+
+You must have a local install of Node master @ ~ 694ac6de5ba2591c8d3d56017b2423bd3e39f769
+
+#### Building the addons
+
+```
+npm i node-gyp
+node-gyp rebuild --nodedir=your/local/node/dir -C ./addons/passthrough
+node-gyp rebuild --nodedir=your/local/node/dir -C ./addons/fs-sink
+node-gyp rebuild --nodedir=your/local/node/dir -C ./addons/fs-source
+```
+
+#### Tests
 
 Tests sit in the `/test/` directory.
 For more information, see the [tests readme](tests/readme.md).
