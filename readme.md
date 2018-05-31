@@ -54,6 +54,7 @@ The Protocol must be simple:
 - Pull-based: The consumer requests ("pulls") data from the producer.
 - Binary-only: Data is binary buffers only, "object mode" and string encodings are not supported at the protocol level.
 - Stateless: The protocol must not require state to be maintained out-of-band.
+  - Minimize state assumed between calls.
 - One-to-one: The protocol assumes a one-to-one relationship between producer and consumer.
 - Timing agnostic: The protocol makes no timing (sync or async) assumptions.
 - No buffering: The protocol must not require buffering (although specific implementations might).
