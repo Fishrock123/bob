@@ -2,8 +2,8 @@
 
 // node --expose-internals file-to-file-test.js ./fixtures/test
 
-const FileSource = require('../fs/file-source')
-const FileSink = require('../fs/file-sink')
+const FileSource = require('fs-source')
+const FileSink = require('fs-sink')
 const PassThrough = require('../reference-passthrough')
 
 const fileSource = new FileSource(process.argv[2])

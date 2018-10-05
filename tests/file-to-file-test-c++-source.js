@@ -3,7 +3,7 @@
 // node --expose-internals file-to-file-test-c++-source.js ./fixtures/test
 
 const BindFileSource = require('../addons/fs-source/build/Release/addon')
-const FileSink = require('../fs/file-sink')
+const FileSink = require('fs-sink')
 const PassThrough = require('../addons/passthrough/build/Release/addon')
 
 const fileSink = new FileSink(process.argv[2] + '_')

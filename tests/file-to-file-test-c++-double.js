@@ -2,8 +2,8 @@
 
 // node --expose-internals file-to-file-test-c++-double.js ./fixtures/test
 
-const FileSource = require('../fs/file-source')
-const FileSink = require('../fs/file-sink')
+const FileSource = require('fs-source')
+const FileSink = require('fs-sink')
 const PassThrough = require('../addons/passthrough/build/Release/addon')
 
 const fileSource = new FileSource(process.argv[2])
