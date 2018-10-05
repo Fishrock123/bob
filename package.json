@@ -1,0 +1,28 @@
+{
+  "name": "bob",
+  "version": "0.1.0",
+  "description": "A Node.js strategic initiative aiming to improve Node.js streaming data interfaces, both within Node.js core internally, and hopefully also as future public APIs.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fishrock123/bob.git"
+  },
+  "keywords": [
+    "BOB",
+    "bob",
+    "streams",
+    "stream",
+    "pull",
+    "strategic",
+    "initiative"
+  ],
+  "author": "Jeremiah Senkpiel <fishrock123@rocketmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Fishrock123/bob/issues"
+  },
+  "homepage": "https://github.com/Fishrock123/bob#readme",
+  "private": true
+}
