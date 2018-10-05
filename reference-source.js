@@ -1,6 +1,6 @@
 'use strict'
 
-const status_type = require('../status-enum')
+const status_type = require('./status-enum')
 
 class Source {
   constructor () {

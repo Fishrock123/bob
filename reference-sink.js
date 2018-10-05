@@ -1,7 +1,7 @@
 'use strict'
 
 const { Buffer } = require('buffer')
-const status_type = require('../status-enum')
+const status_type = require('./status-enum')
 
 class Sink {
   constructor () {
