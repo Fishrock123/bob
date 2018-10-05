@@ -1,14 +1,15 @@
 # BOB
 
-A Work-In-Progress binary data "streams+" implementation via data producers, data consumers, and pull flow.
+A binary data "streams+" API & implementations via data producers, data consumers, and pull flow.
 
 _The name? something something B~~L~~OB, credit Matteo Collina._
 
-This is [a Node.js strategic initiative](strategic-initiatives) aiming to improve Node.js streaming data interfaces, both within Node.js core internally, and hopefully also as future public APIs.
+This is [a Node.js strategic initiative](https://github.com/nodejs/TSC/blob/master/Strategic-Initiatives.md#current-initiatives) aiming to improve Node.js streaming data interfaces, both within Node.js core internally, and hopefully also as future public APIs.
 
 ## API Reference
 
 The following files serve as the API's reference:
+- The [Status Enum](reference-status-enum.js) - _Status codes_
 - A [Source](reference-source.js) - _The data provider_
 - A [Sink](reference-sink.js) - _The data consumer_
 - A [Passthrough](reference-passthrough.js) - _A good example of the whole API_
@@ -24,11 +25,26 @@ sink.bindSource(source, error => {
 })
 ```
 
-## Performance
+## API Extension Reference
 
-Please see [performance.md](performance.md) for profiling results & information.
+The following files serve as API extension references:
+- [extension-start](reference-extension-start.js) - _Explicitly_ start a sink
+  * Useful for e.g. Socket start after setup.
+  * A Sink implementing this extension _may require_ its use to start.
+- [extension-stop](reference-extension-stop.js) - Tell a source to stop.
+  * Useful for dealing with timeouts on network APIs.
 
-Current results estimate a 30% decrease of CPU time in bad cases, and up to 8x decrease in good cases. This should correlate to overall throughput but may not be exact.
+## Published Modules
+
+The following modules are published to npm and are _technically usable_.
+- The status codes enum: [bob-status](https://github.com/Fishrock123/bob-status)
+- A file system source: [fs-source](https://github.com/Fishrock123/fs-source)
+- A file system sink: [fs-sink](https://github.com/Fishrock123/fs-sink)
+- A zlib transform: [zlib-transform](https://github.com/Fishrock123/zlib-transform)
+
+The following modules are not published but are functioning.
+- A TCP socket "duplex": [socket](https://github.com/Fishrock123/socket)
+- A TCP server of "duplex" sockets: [socket](https://github.com/Fishrock123/socket)
 
 ## Project Approach
 
@@ -65,8 +81,11 @@ The Protocol must be simple:
 - Should own any preallocated memory (the buffer).
 - Must never make more than one data request upstream at the same time.
 
-## Unsolved Issues
-- Unknown how best to integrate timeouts at the current time.
+## Performance
+
+Please see [performance.md](performance.md) for profiling results & information.
+
+Current results estimate a 30% decrease of CPU time in bad cases, and up to 8x decrease in good cases. This should correlate to overall throughput but may not be exact.
 
 ## Project Layout
 
@@ -95,5 +114,3 @@ For more information, see the [tests readme](tests/readme.md).
 ## License
 
 [MIT Licensed](license) — _[Contributions via DCO 1.1](contributing.md#developers-certificate-of-origin)_
-
-[strategic-initiatives]: https://github.com/nodejs/TSC/blob/master/Strategic-Initiatives.md#current-initiatives
