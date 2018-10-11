@@ -6,6 +6,18 @@ _The name? something something B~~L~~OB, credit Matteo Collina._
 
 This is [a Node.js strategic initiative](https://github.com/nodejs/TSC/blob/master/Strategic-Initiatives.md#current-initiatives) aiming to improve Node.js streaming data interfaces, both within Node.js core internally, and hopefully also as future public APIs.
 
+## Published Modules
+
+The following modules are published to npm and are _technically usable_.
+- The status codes enum: [bob-status](https://github.com/Fishrock123/bob-status)
+- A file system source: [fs-source](https://github.com/Fishrock123/fs-source)
+- A file system sink: [fs-sink](https://github.com/Fishrock123/fs-sink)
+- A zlib transform: [zlib-transform](https://github.com/Fishrock123/zlib-transform)
+
+The following modules are not published but are functioning.
+- A TCP socket "duplex": [in "socket"](https://github.com/Fishrock123/socket)
+- A TCP server of "duplex" sockets: [also in "socket"](https://github.com/Fishrock123/socket)
+
 ## API Reference
 
 The following files serve as the API's reference:
@@ -58,18 +70,6 @@ The following files serve as API extension references:
   * A Sink implementing this extension _may require_ its use to start.
 - [extension-stop](reference-extension-stop.js) - Tell a source to stop.
   * Useful for dealing with timeouts on network APIs.
-
-## Published Modules
-
-The following modules are published to npm and are _technically usable_.
-- The status codes enum: [bob-status](https://github.com/Fishrock123/bob-status)
-- A file system source: [fs-source](https://github.com/Fishrock123/fs-source)
-- A file system sink: [fs-sink](https://github.com/Fishrock123/fs-sink)
-- A zlib transform: [zlib-transform](https://github.com/Fishrock123/zlib-transform)
-
-The following modules are not published but are functioning.
-- A TCP socket "duplex": [in "socket"](https://github.com/Fishrock123/socket)
-- A TCP server of "duplex" sockets: [also in "socket"](https://github.com/Fishrock123/socket)
 
 ## Project Approach
 
