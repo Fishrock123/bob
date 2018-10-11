@@ -84,22 +84,24 @@ All of these steps necessitate the buy-in of many stakeholders, both in Node.js 
 ## Goals
 Some collective goals for this initiative.
 
-- Both performance and ease-of-use are key motivating goals.
+- Both performance and ease-of-use are key.
 - Implementable in a performant and usable way for both JS and C++.
 - Browser portability is preferable.
 
 ### Protocol
-As a preface, "protocol" refers to a system with "producer / source" and "consumer / sink" endpoints.
+_As a preface, "protocol" refers to a system with "producer / source" and "consumer / sink" endpoints._
 
-The Protocol must be simple:
+The Protocol itself must be simple:
 - Pull-based: The consumer requests ("pulls") data from the producer.
 - Binary-only: Data is binary buffers only, "object mode" and string encodings are not supported at the protocol level.
 - Stateless: The protocol must not require state to be maintained out-of-band.
+  - _Non-normative: While to protocol itself does not require out-of-band state, actual operations almost always do._
   - Minimize state assumed between calls.
 - One-to-one: The protocol assumes a one-to-one relationship between producer and consumer.
 - Timing agnostic: The protocol makes no timing (sync or async) assumptions.
 - No buffering: The protocol must not require buffering (although specific implementations might).
-- In-line errors and EOF: Errors, data, and EOF should flow through the same call path.
+  - _Non-normative: While to protocol itself does not require buffering, starting sources almost always do (including transforms)._
+- In-line errors and EOF: Errors, data, and EOF ("end") should flow through the same call path.
 
 ### Consumer
 - Should make no assumption on the timing of when data will be received (sync or async).
