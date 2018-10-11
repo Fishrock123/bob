@@ -68,8 +68,8 @@ The following modules are published to npm and are _technically usable_.
 - A zlib transform: [zlib-transform](https://github.com/Fishrock123/zlib-transform)
 
 The following modules are not published but are functioning.
-- A TCP socket "duplex": [socket](https://github.com/Fishrock123/socket)
-- A TCP server of "duplex" sockets: [socket](https://github.com/Fishrock123/socket)
+- A TCP socket "duplex": [in "socket"](https://github.com/Fishrock123/socket)
+- A TCP server of "duplex" sockets: [also in "socket"](https://github.com/Fishrock123/socket)
 
 ## Project Approach
 
