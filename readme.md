@@ -15,6 +15,8 @@ The following files serve as the API's reference:
 - A [Passthrough](reference-passthrough.js) - _A good example of the whole API_
 - A [Buffered Transform](reference-buffered-transform.js) - _An example of buffering_
 
+### Examples
+
 The composition of the classes looks like this:
 ```js
 const source = new Source(/* args */)
@@ -23,6 +25,29 @@ const sink = new Sink(/* args */)
 sink.bindSource(source, error => {
   // The stream is finished when this is called.
 })
+```
+
+An entire passthrough could look like this:
+```js
+class PassThrough {
+  bindSource (source) {
+    source.bindSink(this)
+    this.source = source
+    return this
+  }
+
+  bindSink (sink) {
+    this.sink = sink
+  }
+
+  next (status, error, buffer, bytes) {
+    this.sink.next(status, error, buffer, bytes)
+  }
+
+  pull (error, buffer) {
+    this.source.pull(error, buffer)
+  }
+}
 ```
 
 ## API Extension Reference
