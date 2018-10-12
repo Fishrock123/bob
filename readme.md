@@ -6,6 +6,8 @@ _The name? something something B~~L~~OB, credit Matteo Collina._
 
 This is [a Node.js strategic initiative](https://github.com/nodejs/TSC/blob/master/Strategic-Initiatives.md#current-initiatives) aiming to improve Node.js streaming data interfaces, both within Node.js core internally, and hopefully also as future public APIs.
 
+![Flow of data & errors though BOB sinks & sources](diagrams/BOB-errors-diagram.png "Flow of data & errors though BOB sinks & sources")
+
 ## Published Modules
 
 The following modules are published to npm and are _technically usable_.
