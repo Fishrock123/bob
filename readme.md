@@ -97,12 +97,12 @@ The Protocol itself must be simple:
 - Pull-based: The consumer requests ("pulls") data from the producer.
 - Binary-only: Data is binary buffers only, "object mode" and string encodings are not supported at the protocol level.
 - Stateless: The protocol must not require state to be maintained out-of-band.
-  - _Non-normative: While to protocol itself does not require out-of-band state, actual operations almost always do._
+  - _Non-normative: While the protocol itself does not require out-of-band state, actual operations almost always do._
   - Minimize state assumed between calls.
 - One-to-one: The protocol assumes a one-to-one relationship between producer and consumer.
 - Timing agnostic: The protocol makes no timing (sync or async) assumptions.
 - No buffering: The protocol must not require buffering (although specific implementations might).
-  - _Non-normative: While to protocol itself does not require buffering, starting sources almost always do (including transforms)._
+  - _Non-normative: While the protocol itself does not require buffering, starting sources almost always do (including transforms)._
 - In-line errors and EOF: Errors, data, and EOF ("end") should flow through the same call path.
 
 ### Consumer
