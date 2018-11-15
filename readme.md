@@ -15,6 +15,7 @@ The following modules are published to npm and are _technically usable_.
 - A file system source: [fs-source](https://github.com/Fishrock123/fs-source)
 - A file system sink: [fs-sink](https://github.com/Fishrock123/fs-sink)
 - A zlib transform: [zlib-transform](https://github.com/Fishrock123/zlib-transform)
+- Header for the C++ api: [bob-base](https://github.com/Fishrock123/bob-base)
 
 The following modules are not published but are functioning.
 - A TCP socket "duplex": [in "socket"](https://github.com/Fishrock123/socket)
@@ -28,6 +29,7 @@ The following files serve as the API's reference:
 - A [Sink](reference-sink.js) - _The data consumer_
 - A [Passthrough](reference-passthrough.js) - _A good example of the whole API_
 - A [Buffered Transform](reference-buffered-transform.js) - _An example of buffering_
+- [`bob.h`](https://github.com/Fishrock123/bob-base/blob/master/bob.h) - _The C++ header in 'bob-base'_
 
 ### Examples
 
