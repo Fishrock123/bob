@@ -11,11 +11,11 @@ This is [a Node.js strategic initiative](https://github.com/nodejs/TSC/blob/mast
 ## Published Modules
 
 The following modules are published to npm and are _technically usable_.
-- The status codes enum: [bob-status](https://github.com/Fishrock123/bob-status)
-- A file system source: [fs-source](https://github.com/Fishrock123/fs-source)
-- A file system sink: [fs-sink](https://github.com/Fishrock123/fs-sink)
-- A zlib transform: [zlib-transform](https://github.com/Fishrock123/zlib-transform)
-- Header for the C++ api: [bob-base](https://github.com/Fishrock123/bob-base)
+- The status codes enum: [bob-status](https://github.com/Fishrock123/bob-status) _([npm](https://www.npmjs.com/package/bob-status))_
+- A file system source: [fs-source](https://github.com/Fishrock123/fs-source) _([npm](https://www.npmjs.com/package/fs-source))_
+- A file system sink: [fs-sink](https://github.com/Fishrock123/fs-sink) _([npm](https://www.npmjs.com/package/fs-sink))_
+- A zlib transform: [zlib-transform](https://github.com/Fishrock123/zlib-transform) _([npm](https://www.npmjs.com/package/zlib-transform))_
+- Header for the C++ api: [bob-base](https://github.com/Fishrock123/bob-base) _([npm](https://www.npmjs.com/package/bob-base))_
 
 The following modules are not published but are functioning.
 - A TCP socket "duplex": [in "socket"](https://github.com/Fishrock123/socket)
