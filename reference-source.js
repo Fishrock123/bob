@@ -12,9 +12,10 @@ class Source {
     this.sink = sink
   }
 
-  pull (error, buffer) {
+  pull (error, buffer, offset) {
     // error MUST be null or an error
     // buffer MUST be a Buffer
+    // if offset exists, use it if possible
     if (error || sourceError) {
       return this.sink.next(status_type.error, error)
     }

@@ -55,7 +55,7 @@ class BufferedTransform {
     }
   }
 
-  pull (error, buffer) {
+  pull (error, buffer /*, offset */) {
     if (this._bytes === 0) {
       return this.source.pull(error, buffer)
     }
