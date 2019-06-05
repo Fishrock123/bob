@@ -19,6 +19,7 @@ class StopExtensionSource extends Source {
   pull (error, buffer) {
     if (this[kStopped]) {
       this.sink.next(status_type.end, null, buffer, 0)
+      return
     }
 
     // ... else ...
