@@ -4,6 +4,7 @@
 
 const zlib = require('zlib')
 
+const Stream = require('../helpers/stream')
 const FileSource = require('fs-source')
 const FileSink = require('fs-sink')
 const ZlibTransform = require('zlib-transform')
@@ -12,11 +13,10 @@ const fileSource = new FileSource(process.argv[2])
 const fileSink = new FileSink(process.argv[2] + '.gz')
 const zlibTransform = new ZlibTransform({}, zlib.constants.GZIP)
 
-fileSink.bindSource(zlibTransform.bindSource(fileSource), error => {
-  if (error) {
-    console.error('ERROR!', error)
-    console.error((new Error()).stack)
-  } else {
-    console.log('done')
+const stream = new Stream(fileSource, zlibTransform, fileSink)
+stream.start(err => {
+  if (err) {
+    return console.error('ERROR!', err)
   }
+  console.log('done')
 })
