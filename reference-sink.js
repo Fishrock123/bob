@@ -6,18 +6,20 @@ const status_type = require('./status-enum')
 class Sink {
   constructor () {
     this.source = null
-    this.bindCb = null
+    this.exitCb = null
   }
 
-  bindSource (source, bindCb) {
+  bindSource (source) {
     // source MUST be a data source with a read(err, buffer) function
-    // bindCb MUST be a function with an error argument
-
     this.source = source
-    this.bindCb = bindCb
 
     // Critically important
     this.source.bindSink(this)
+  }
+
+  start (exitCb) {
+    // exitCb MUST be a function with an error argument
+    this.exitCb = exitCb
 
     // start reading
     // sink handles buffer allocation
@@ -33,9 +35,9 @@ class Sink {
     // buffer MUST be a Buffer
     // bytes MUST be the number of bytes read
 
-    if (error) {
+    if (error || status === status_type.end) {
       // cleanup
-      return bindCb(error)
+      return exitCb(error)
     }
 
     // write or process buffer here

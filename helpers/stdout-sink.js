@@ -1,12 +1,12 @@
 'use strict'
 
 const { Buffer } = require('buffer')
-const status_type = require('../status-enum')
+const status_type = require('bob-status')
 
 class StdoutSink {
   constructor () {
     this.source = null
-    this.bindCb = null
+    this.exitCb = null
 
     try {
       this._buffer = Buffer.allocUnsafe(64 * 1024)
@@ -15,22 +15,25 @@ class StdoutSink {
     }
   }
 
-  bindSource (source, bindCb) {
-    if (this._allocError) {
-      return bindCb(this._allocError)
-    }
-
+  bindSource (source) {
     this.source = source
-    this.bindCb = bindCb
-
     this.source.bindSink(this)
+    return this
+  }
+
+  start (exitCb) {
+    if (this._allocError) {
+      return exitCb(this._allocError)
+    }
+    this.exitCb = exitCb
 
     this.source.pull(null, this._buffer)
   }
 
   next (status, error, buffer, bytes) {
-    if (status === status_type.end) return
-    if (error) bindCb(error)
+    if (error || status === status_type.end) {
+      return this.exitCb(error)
+    }
 
     process.stdout.write(buffer.slice(0, bytes))
 
