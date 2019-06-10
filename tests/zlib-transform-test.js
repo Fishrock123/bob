@@ -14,13 +14,9 @@ const fileSink = new FileSink(process.argv[2] + '.gz')
 const zlibTransform = new ZlibTransform({}, zlib.constants.GZIP)
 
 const stream = new Stream(fileSource, zlibTransform, fileSink)
-try {
-  stream.start()
-} catch (e) {}
-
-stream.then(resolved => {
-  console.log('done (resolved)')
-}, rejected => {
-  console.error('ERROR! (rejected)', rejected)
-  console.error((new Error()).stack)
+stream.start(err => {
+  if (err) {
+    return console.error('ERROR!', err)
+  }
+  console.log('done')
 })

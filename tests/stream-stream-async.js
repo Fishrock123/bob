@@ -3,6 +3,7 @@
 // node --expose-internals zlib-transform-test.js ./fixtures/test
 
 const zlib = require('zlib')
+const util = require('util')
 
 const Stream = require('../helpers/stream')
 const FileSource = require('fs-source')
@@ -20,10 +21,9 @@ const passThrough = new PassThrough()
   const streamSink = new Stream(passThrough, fileSink)
   const stream = new Stream(streamSource, new PassThrough(), streamSink)
 
-  await stream.start()
+  await util.promisify(stream.start.bind(stream))()
 
   console.log('done (resolved)')
 })().catch(err => {
   console.error('ERROR! (rejected)', err)
-  console.error((new Error()).stack)
 })

@@ -12,12 +12,9 @@ const fileSink = new FileSink(process.argv[2] + '_')
 const passThrough = new PassThrough()
 
 const stream = new Stream(fileSource, passThrough, fileSink)
-try {
-  stream.start()
-} catch (e) {}
-
-stream.then(resolved => {
-  console.log('done (resolved)')
-}, rejected => {
-  console.error('ERROR! (rejected)', rejected)
+stream.start(err => {
+  if (err) {
+    return console.error('ERROR!', err)
+  }
+  console.log('done')
 })
