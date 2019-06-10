@@ -5,5 +5,3 @@ tests/fixtures/*_
 
 *.gz
 *.log
-
-package-lock.json
