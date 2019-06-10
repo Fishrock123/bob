@@ -27,7 +27,7 @@
   "private": true,
   "dependencies": {
     "bob-status": "0.0.1",
-    "fs-sink": "0.0.4",
+    "fs-sink": "0.1.1",
     "fs-source": "0.0.3",
     "zlib-transform": "0.0.1"
   }
