@@ -1,6 +1,6 @@
 'use strict'
 
-// node --expose-internals zlib-transform-test.js ./fixtures/test
+// node --expose-internals stream-stream-async.js ./fixtures/test
 
 const zlib = require('zlib')
 const util = require('util')
