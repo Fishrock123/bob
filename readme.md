@@ -38,7 +38,8 @@ The composition of the classes looks like this:
 const source = new Source(/* args */)
 const sink = new Sink(/* args */)
 
-sink.bindSource(source, error => {
+sink.bindSource(source)
+sink.start(error => {
   // The stream is finished when this is called.
 })
 ```
@@ -69,9 +70,6 @@ class PassThrough {
 ## API Extension Reference
 
 The following files serve as API extension references:
-- [extension-start](reference-extension-start.js) - _Explicitly_ start a sink
-  * Useful for e.g. Socket start after setup.
-  * A Sink implementing this extension _may require_ its use to start.
 - [extension-stop](reference-extension-stop.js) - Tell a source to stop.
   * Useful for dealing with timeouts on network APIs.
 
