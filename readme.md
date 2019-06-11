@@ -28,6 +28,7 @@ The following files serve as the API's reference:
 - A [Source](reference-source.js) - _The data provider_
 - A [Sink](reference-sink.js) - _The data consumer_
 - A [Passthrough](reference-passthrough.js) - _A good example of the whole API_
+- A [Verify Passthrough](reference-verify.js) - _A typechecking API enforcement passthrough_
 - A [Buffered Transform](reference-buffered-transform.js) - _An example of buffering_
 - [`bob.h`](https://github.com/Fishrock123/bob-base/blob/master/bob.h) - _The C++ header in 'bob-base'_
 

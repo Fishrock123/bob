@@ -5,6 +5,7 @@ const tap = require('tap')
 const AssertionSource = require('./helpers/assertion-source')
 const AssertionSink = require('./helpers/assertion-sink')
 const BufferedTransform = require('../reference-buffered-transform')
+const Verify = require('../reference-verify')
 const Stream = require('../helpers/stream')
 
 tap.test('test reference buffered transform', t => {
@@ -23,7 +24,7 @@ tap.test('test reference buffered transform', t => {
 
   const transform = new BufferedTransform(8) // Buffer 8 bytes
 
-  const stream = new Stream(source, transform, sink)
+  const stream = new Stream(source, new Verify(), transform, new Verify(), sink)
   stream.start(error => {
     t.error(error, 'Exit Callback received unexpected error')
     t.end()

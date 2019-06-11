@@ -5,6 +5,7 @@ const zlib = require('zlib')
 const util = require('util')
 
 const Stream = require('../helpers/stream')
+const Verify = require('../reference-verify')
 const AssertionSource = require('./helpers/assertion-source')
 const AssertionSink = require('./helpers/assertion-sink')
 const ZlibTransform = require('zlib-transform')
@@ -18,7 +19,7 @@ tap.test('test Stream() with promisify', async t => {
 
   const source = new AssertionSource(expects)
   const sink = new AssertionSink(expects)
-  const stream = new Stream(source, sink)
+  const stream = new Stream(source, new Verify(), sink)
 
   await util.promisify(stream.start.bind(stream))()
 })
@@ -43,7 +44,7 @@ tap.test('test Stream() consuming other Stream()s', async t => {
 
   const streamSource = new Stream(source, zlibTransform)
   const streamSink = new Stream(new PassThrough(), sink)
-  const stream = new Stream(streamSource, new PassThrough(), streamSink)
+  const stream = new Stream(streamSource, new Verify(), streamSink)
 
   await util.promisify(stream.start.bind(stream))()
 })

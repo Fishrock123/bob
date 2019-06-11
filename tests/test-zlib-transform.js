@@ -6,6 +6,7 @@ const zlib = require('zlib')
 const AssertionSource = require('./helpers/assertion-source')
 const AssertionSink = require('./helpers/assertion-sink')
 const ZlibTransform = require('zlib-transform')
+const Verify = require('../reference-verify')
 const Stream = require('../helpers/stream')
 
 tap.test('test zlib transform', t => {
@@ -31,7 +32,7 @@ tap.test('test zlib transform', t => {
     hwm: 6 // important
   }, zlib.constants.GZIP)
 
-  const stream = new Stream(source, zlibTransform, sink)
+  const stream = new Stream(source, new Verify(), zlibTransform, new Verify(), sink)
   stream.start(error => {
     t.error(error, 'Exit Callback received unexpected error')
     t.end()

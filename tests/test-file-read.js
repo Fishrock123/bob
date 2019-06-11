@@ -5,6 +5,8 @@ const path = require('path')
 
 const FileSource = require('fs-source')
 const AssertionSink = require('./helpers/assertion-sink')
+const Verify = require('../reference-verify')
+const Stream = require('../helpers/stream')
 
 tap.test('test file read', t => {
   t.plan(1)
@@ -17,7 +19,8 @@ tap.test('test file read', t => {
     ''
   ], 'utf8')
 
-  sink.bindSource(fileSource).start(error => {
+  const stream = new Stream(fileSource, new Verify(), sink)
+  stream.start(error => {
     t.error(error, 'Exit Callback received unexpected error')
     t.end()
   })
