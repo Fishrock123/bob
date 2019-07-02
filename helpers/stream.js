@@ -1,9 +1,6 @@
 'use strict'
 
 class Stream {
-  source = null
-  sink = null
-
   constructor (...components) {
     const last = components.length - 1
     this.source = components[0]

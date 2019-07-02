@@ -1,7 +1,7 @@
 'use strict'
 
 const { Buffer } = require('buffer')
-const status_type = require('./status-enum')
+const status_type = require('./reference-status-enum') // eslint-disable-line camelcase
 
 class BufferedTransform {
   constructor (bufferSize, reallocateSize) {
@@ -26,24 +26,19 @@ class BufferedTransform {
   }
 
   next (status, error, buffer, bytes) {
-    if (error !== null) {
+    if (status === status_type.error) {
       return this.sink.next(status, error)
     }
     if (status === status_type.end) {
-      if (this._bytes === 0) {
-        return this.sink.next(status)
-      }
-
-      // transform buffer
-
-      return this.pull(null, buffer)
+      // Flush
+      return this.sink.next(status, null, this._buffer, this._bytes)
     }
 
     if (this._bytes + bytes > this._buffer.length) {
       const prevBuffer = this._buffer
       const reallocSize = this._buffer.length + this._reallocateSize
       const neededSize = this._bytes + bytes
-      this._buffer = new Buffer.allocUnsafe(neededSize > reallocSize ? neededSize + reallocSize : reallocSize)
+      this._buffer = Buffer.allocUnsafe(neededSize > reallocSize ? neededSize + reallocSize : reallocSize)
       prevBuffer.copy(this._buffer, 0, 0, neededSize)
     }
 
@@ -56,7 +51,7 @@ class BufferedTransform {
   }
 
   pull (error, buffer) {
-    if (this._bytes === 0) {
+    if (error !== null || this._bytes === 0) {
       return this.source.pull(error, buffer)
     }
 
