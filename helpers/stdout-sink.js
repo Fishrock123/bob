@@ -1,7 +1,7 @@
 'use strict'
 
 const { Buffer } = require('buffer')
-const status_type = require('bob-status')
+const status_type = require('bob-status') // eslint-disable-line camelcase
 
 class StdoutSink {
   constructor () {

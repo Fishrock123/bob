@@ -1,7 +1,7 @@
 'use strict'
 
 const { Buffer } = require('buffer')
-const status_type = require('./status-enum')
+const status_type = require('./reference-status-enum') // eslint-disable-line camelcase
 
 class Sink {
   constructor () {
@@ -23,7 +23,7 @@ class Sink {
 
     // start reading
     // sink handles buffer allocation
-    const buffer = new Buffer(0)
+    const buffer = Buffer.alloc(0)
 
     this.source.pull(null, buffer)
   }
@@ -37,21 +37,22 @@ class Sink {
 
     if (error || status === status_type.end) {
       // cleanup
-      return exitCb(error)
+      return this.exitCb(error)
     }
 
     // write or process buffer here
 
     // if there was an error writing or processing the buffer...
+    const sinkError = new Error()
     if (sinkError) {
       return this.source.pull(error)
     }
 
     // pull again
     // sink handles buffer allocation
-    const buffer = new Buffer(0)
+    const buf = Buffer.alloc(0)
 
-    this.source.pull(null, buffer)
+    this.source.pull(null, buf)
   }
 }
 

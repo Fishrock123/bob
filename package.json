@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "A Node.js strategic initiative aiming to improve Node.js streaming data interfaces, both within Node.js core internally, and hopefully also as future public APIs.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test-only": "tap tests/*.js -J",
+    "lint": "standard --verbose",
+    "test": "npm run -s lint && npm run -s test-only"
   },
   "repository": {
     "type": "git",
@@ -27,8 +29,15 @@
   "private": true,
   "dependencies": {
     "bob-status": "0.0.1",
-    "fs-sink": "0.1.1",
+    "fs-sink": "0.1.3",
     "fs-source": "0.0.3",
-    "zlib-transform": "0.0.1"
+    "standard": "^12.0.1",
+    "tap": "^14.3.1",
+    "zlib-transform": "0.0.3"
+  },
+  "standard": {
+    "ignore": [
+      "experiments/*"
+    ]
   }
 }

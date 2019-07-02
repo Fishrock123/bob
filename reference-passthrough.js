@@ -1,10 +1,10 @@
 'use strict'
 
 class PassThrough {
-  sink = null
-  source = null
-
-  constructor () {}
+  constructor () {
+    this.sink = null
+    this.source = null
+  }
 
   bindSource (source) {
     source.bindSink(this)
