@@ -4,22 +4,24 @@ const util = require('util')
 const debuglog = util.debuglog('bob')
 
 const { Duplex } = require('stream')
-const status_type = require('bob-status')
+const status_type = require('../reference-status-enum') // eslint-disable-line camelcase
 
 const kWriteCallback = Symbol('write callback')
 const kDestroyCallback = Symbol('destroy callback')
 const kErrored = Symbol('errored')
 
 class BobDuplex extends Duplex {
-  source = null
-  sink = null
+  // Streams3 <-> BOB interface
 
-  constructor(options = { autoDestroy: true }) {
+  constructor (options = { autoDestroy: true }) {
     if (options.autoDestroy === undefined) {
       options.autoDestroy = true
     }
 
     super(options)
+
+    this.source = null
+    this.sink = null
 
     this.name = options.name
 
@@ -32,7 +34,7 @@ class BobDuplex extends Duplex {
     this.cork()
   }
 
-  _write(chunk, encoding, callback) {
+  _write (chunk, encoding, callback) {
     debuglog(`_WRITE ${this.name}`, arguments)
 
     if (this[kWriteCallback] !== null) {
