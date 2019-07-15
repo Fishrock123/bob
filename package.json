@@ -37,6 +37,7 @@
     "tap": "^14.3.1"
   },
   "files": [
+    "index.js",
     "helpers/*",
     "reference-*",
     "tests/helpers/*",
