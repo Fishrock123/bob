@@ -9,6 +9,6 @@ module.exports = {
 
   // Lookup map
   '-1': 'error',
-  '0': 'end',
-  '1': 'continue'
+  '0': 'end', // eslint-disable-line quote-props
+  '1': 'continue' // eslint-disable-line quote-props
 }
