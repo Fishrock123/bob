@@ -36,6 +36,13 @@
     "standard": "^13.0.2",
     "tap": "^14.3.1"
   },
+  "files": [
+    "helpers/*",
+    "reference-*",
+    "tests/helpers/*",
+    "tests/fixtures/*",
+    "tests/test-*"
+  ],
   "standard": {
     "ignore": [
       "experiments/*"
