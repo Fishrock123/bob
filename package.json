@@ -1,6 +1,6 @@
 {
   "name": "bob-streams",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A Node.js strategic initiative aiming to improve Node.js streaming data interfaces, both within Node.js core internally, and hopefully also as future public APIs.",
   "scripts": {
     "test-only": "tap tests/*.js -J",
