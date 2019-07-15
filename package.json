@@ -1,6 +1,6 @@
 {
-  "name": "bob",
-  "version": "0.1.0",
+  "name": "bob-streams",
+  "version": "0.2.0",
   "description": "A Node.js strategic initiative aiming to improve Node.js streaming data interfaces, both within Node.js core internally, and hopefully also as future public APIs.",
   "scripts": {
     "test-only": "tap tests/*.js -J",
@@ -26,7 +26,6 @@
     "url": "https://github.com/Fishrock123/bob/issues"
   },
   "homepage": "https://github.com/Fishrock123/bob#readme",
-  "private": true,
   "dependencies": {
     "bob-status": "0.0.1",
     "fs-sink": "0.1.3",
