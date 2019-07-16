@@ -3,10 +3,11 @@
 const tap = require('tap')
 const zlib = require('zlib')
 
+const Stream = require('../helpers/stream')
 const AssertionSource = require('./helpers/assertion-source')
 const AssertionSink = require('./helpers/assertion-sink')
-const Stream = require('../helpers/stream')
 const BobDuplex = require('../helpers/bob-duplex')
+const Verify = require('../reference-verify')
 
 tap.test('test streams3 (BobDuplex) with a Transform', t => {
   t.plan(1)
@@ -29,8 +30,8 @@ tap.test('test streams3 (BobDuplex) with a Transform', t => {
   const bobDuplex1 = new BobDuplex({ highWaterMark: 1024, name: '1' })
   const bobDuplex2 = new BobDuplex({ highWaterMark: 1024, name: '2' })
 
-  const stream1 = new Stream(source, bobDuplex1) // eslint-disable-line no-unused-vars
-  const stream2 = new Stream(bobDuplex2, sink)
+  const stream1 = new Stream(source, new Verify(), bobDuplex1) // eslint-disable-line no-unused-vars
+  const stream2 = new Stream(bobDuplex2, new Verify(), sink)
 
   const gzip = zlib.createGzip()
   gzip.on('error', error => t.fail('GZIP error', error))

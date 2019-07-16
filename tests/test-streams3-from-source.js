@@ -4,8 +4,10 @@ const tap = require('tap')
 const fs = require('fs')
 const path = require('path')
 
+const Stream = require('../helpers/stream')
 const AssertionSource = require('./helpers/assertion-source')
 const BobDuplex = require('../helpers/bob-duplex')
+const Verify = require('../reference-verify')
 
 tap.test('test streams3 (BobDuplex) from a source', t => {
   t.plan(2)
@@ -27,6 +29,8 @@ tap.test('test streams3 (BobDuplex) from a source', t => {
 
   const ws = fs.createWriteStream(filename, { highWaterMark: 1024 })
   const bobDuplex = new BobDuplex({ highWaterMark: 1024, name: '1' })
+
+  new Stream(source, new Verify(), bobDuplex) // eslint-disable-line no-new
 
   bobDuplex.bindSource(source)
   bobDuplex.pipe(ws)

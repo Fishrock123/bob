@@ -4,8 +4,10 @@ const tap = require('tap')
 const fs = require('fs')
 const path = require('path')
 
+const Stream = require('../helpers/stream')
 const AssertionSink = require('./helpers/assertion-sink')
 const BobDuplex = require('../helpers/bob-duplex')
+const Verify = require('../reference-verify')
 
 tap.test('test streams3 (BobDuplex) to a sink', t => {
   t.plan(1)
@@ -23,7 +25,8 @@ tap.test('test streams3 (BobDuplex) to a sink', t => {
   rs.pipe(bobDuplex)
   rs.on('error', error => t.fail('ReadStream error', error))
 
-  sink.bindSource(bobDuplex).start(error => {
+  const stream = new Stream(bobDuplex, new Verify(), sink)
+  stream.start(error => {
     t.error(error, 'Exit Callback received unexpected error')
     t.end()
   })
