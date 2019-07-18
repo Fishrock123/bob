@@ -4,9 +4,11 @@ const { Buffer } = require('buffer')
 const status_type = require('bob-status') // eslint-disable-line camelcase
 
 class StdoutSink {
-  constructor () {
+  constructor (encoding) {
     this.source = null
     this.exitCb = null
+
+    this.encoding = encoding
 
     try {
       this._buffer = Buffer.allocUnsafe(64 * 1024)
@@ -31,13 +33,23 @@ class StdoutSink {
   }
 
   next (status, error, buffer, bytes) {
-    if (error || status === status_type.end) {
+    if (status === status_type.error || error) {
       return this.exitCb(error)
     }
 
-    process.stdout.write(buffer.slice(0, bytes))
+    buffer = buffer.slice(0, bytes)
+    if (this.encoding) {
+      process.stdout.write(buffer.toString(this.encoding))
+    } else {
+      process.stdout.write(buffer)
+    }
 
-    this.source.pull(null, this._buffer)
+    if (status === status_type.end) {
+      process.stdout.write('\n')
+      this.exitCb(null)
+    } else {
+      this.source.pull(null, this._buffer)
+    }
   }
 }
 
