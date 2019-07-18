@@ -15,6 +15,7 @@ The following modules are published to npm and are _technically usable_.
 - A file system source: [fs-source](https://github.com/Fishrock123/fs-source) _([npm](https://www.npmjs.com/package/fs-source))_
 - A file system sink: [fs-sink](https://github.com/Fishrock123/fs-sink) _([npm](https://www.npmjs.com/package/fs-sink))_
 - A zlib transform: [zlib-transform](https://github.com/Fishrock123/zlib-transform) _([npm](https://www.npmjs.com/package/zlib-transform))_
+- A crc32 transform: [crc-transform](https://github.com/Fishrock123/crc-transform) _([npm](https://www.npmjs.com/package/crc-transform))_
 - Header for the C++ api: [bob-base](https://github.com/Fishrock123/bob-base) _([npm](https://www.npmjs.com/package/bob-base))_
 
 The following modules are not published but are functioning.
