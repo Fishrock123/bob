@@ -6,7 +6,7 @@ const path = require('path')
 
 const Stream = require('../helpers/stream')
 const AssertionSink = require('./helpers/assertion-sink')
-const BobDuplex = require('../helpers/bob-duplex')
+const WritableSource = require('../helpers/writable-source')
 const Verify = require('../reference-verify')
 
 tap.test('test streams3 (BobDuplex) to a sink', t => {
@@ -20,12 +20,12 @@ tap.test('test streams3 (BobDuplex) to a sink', t => {
   ], 'utf8')
 
   const rs = fs.createReadStream(filename, { highWaterMark: 1024 })
-  const bobDuplex = new BobDuplex({ highWaterMark: 1024, name: '1' })
+  const source = new WritableSource({ highWaterMark: 1024, name: '1' })
 
-  rs.pipe(bobDuplex)
+  rs.pipe(source)
   rs.on('error', error => t.fail('ReadStream error', error))
 
-  const stream = new Stream(bobDuplex, new Verify(), sink)
+  const stream = new Stream(source, new Verify(), sink)
   stream.start(error => {
     t.error(error, 'Exit Callback received unexpected error')
     t.end()

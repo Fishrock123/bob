@@ -3,7 +3,7 @@
 const util = require('util')
 const debuglog = util.debuglog('bob')
 
-const { Duplex } = require('stream')
+const { Writable } = require('stream')
 const status_type = require('../reference-status-enum') // eslint-disable-line camelcase
 
 const kWriteCallback = Symbol('write callback')
@@ -13,7 +13,7 @@ const kErrored = Symbol('errored')
 const kEnded = Symbol('ended')
 const kPulling = Symbol('pulling')
 
-class BobDuplex extends Duplex {
+class WritableSource extends Writable {
   // Streams3 <-> BOB interface
 
   constructor (options = { autoDestroy: true }) {
@@ -23,7 +23,6 @@ class BobDuplex extends Duplex {
 
     super(options)
 
-    this.source = null
     this.sink = null
 
     this.name = options.name
@@ -73,14 +72,6 @@ class BobDuplex extends Duplex {
     this.sink.next(status_type.continue, null, chunk, chunk.length)
   }
 
-  _read (size) {
-    debuglog(`_READ ${this.name}`, arguments)
-
-    // Allocate a sized buffer and pull.
-    // (Since pull() does not presently have any 'size' argument.)
-    this.source.pull(null, Buffer.alloc(size))
-  }
-
   _destroy (err, cb) {
     debuglog(`_DESTROY ${this.name}`, arguments)
 
@@ -118,60 +109,8 @@ class BobDuplex extends Duplex {
     }
   }
 
-  bindSource (source) {
-    debuglog(`BIND ${this.name} to ${source}`)
-
-    source.bindSink(this)
-    this.source = source
-
-    return this
-  }
-
   bindSink (sink) {
     this.sink = sink
-  }
-
-  next (status, error, buffer, bytes) {
-    debuglog(`NEXT ${this.name}`, status_type[status], arguments)
-
-    // If there was a destroy callback we were not getting data,
-    // but rather attempting to close things with an error.
-    if (this[kDestroyCallback]) {
-      debuglog('destroy callback')
-
-      this[kDestroyCallback]()
-      return
-    }
-
-    // If we have an error and have not already been in error state, emit it Streams3 style.
-    if (error !== null) {
-      if (this[kErrored] === false) {
-        this[kErrored] = true
-        this.emit('error', error)
-      }
-      return
-    }
-
-    // Regular data case.
-    if (status === status_type.continue) {
-      this.push(buffer.slice(0, bytes))
-      return
-    }
-
-    // End from upstream source.
-    if (status === status_type.end) {
-      debuglog(`END in ${this.name} next()`)
-
-      // Push a last chunk only if we have one with any written data.
-      if (bytes > 0) {
-        this.push(buffer.slice(0, bytes))
-      }
-      this.push(null)
-      return
-    }
-
-    // If we get to here something is very wrong.
-    throw new Error(`Invalid status without an error: ${status}`)
   }
 
   pull (error, buffer) {
@@ -210,4 +149,4 @@ class BobDuplex extends Duplex {
   }
 }
 
-module.exports = BobDuplex
+module.exports = WritableSource

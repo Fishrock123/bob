@@ -5,7 +5,8 @@ const tap = require('tap')
 const Stream = require('../helpers/stream')
 const AssertionSource = require('./helpers/assertion-source')
 const AssertionSink = require('./helpers/assertion-sink')
-const BobDuplex = require('../helpers/bob-duplex')
+const ReadableSink = require('../helpers/readable-sink')
+const WritableSource = require('../helpers/writable-source')
 const Verify = require('../reference-verify')
 
 tap.test('test streams3 adaptor (BobDuplex)', t => {
@@ -21,15 +22,15 @@ tap.test('test streams3 adaptor (BobDuplex)', t => {
     ''
   ], 'utf8')
 
-  const bobDuplex1 = new BobDuplex({ highWaterMark: 6, name: '1' })
-  const bobDuplex2 = new BobDuplex({ highWaterMark: 6, name: '2' })
+  const rsink = new ReadableSink({ highWaterMark: 6, name: 'rsink' })
+  const wsource = new WritableSource({ highWaterMark: 6, name: 'wsource' })
 
-  const stream1 = new Stream(source, new Verify(), bobDuplex1) // eslint-disable-line no-unused-vars
-  const stream2 = new Stream(bobDuplex2, new Verify(), sink)
+  const rstream = new Stream(source, new Verify(), rsink) // eslint-disable-line no-unused-vars
+  const wstream = new Stream(wsource, new Verify(), sink)
 
-  bobDuplex1.pipe(bobDuplex2)
+  rsink.pipe(wsource)
 
-  stream2.start(error => {
+  wstream.start(error => {
     t.error(error, 'Exit Callback received unexpected error')
     t.end()
   })

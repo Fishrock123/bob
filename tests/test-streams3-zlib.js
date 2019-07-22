@@ -6,7 +6,8 @@ const zlib = require('zlib')
 const Stream = require('../helpers/stream')
 const AssertionSource = require('./helpers/assertion-source')
 const AssertionSink = require('./helpers/assertion-sink')
-const BobDuplex = require('../helpers/bob-duplex')
+const ReadableSink = require('../helpers/readable-sink')
+const WritableSource = require('../helpers/writable-source')
 const Verify = require('../reference-verify')
 
 tap.test('test streams3 (BobDuplex) with a Transform', t => {
@@ -27,18 +28,18 @@ tap.test('test streams3 (BobDuplex) with a Transform', t => {
     Buffer.alloc(0)
   ])
 
-  const bobDuplex1 = new BobDuplex({ highWaterMark: 1024, name: '1' })
-  const bobDuplex2 = new BobDuplex({ highWaterMark: 1024, name: '2' })
+  const rsink = new ReadableSink({ highWaterMark: 1024, name: 'rsink' })
+  const wsource = new WritableSource({ highWaterMark: 1024, name: 'wsource' })
 
-  const stream1 = new Stream(source, new Verify(), bobDuplex1) // eslint-disable-line no-unused-vars
-  const stream2 = new Stream(bobDuplex2, new Verify(), sink)
+  const rstream = new Stream(source, new Verify(), rsink) // eslint-disable-line no-unused-vars
+  const wstream = new Stream(wsource, new Verify(), sink)
 
   const gzip = zlib.createGzip()
   gzip.on('error', error => t.fail('GZIP error', error))
 
-  bobDuplex1.pipe(gzip).pipe(bobDuplex2)
+  rsink.pipe(gzip).pipe(wsource)
 
-  stream2.start(error => {
+  wstream.start(error => {
     t.error(error, 'Exit Callback received unexpected error')
     t.end()
   })
