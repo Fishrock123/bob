@@ -3,7 +3,7 @@
 const util = require('util')
 const debuglog = util.debuglog('bob')
 
-const { Readable } = require('stream')
+const { Readable } = require('readable-stream')
 const status_type = require('../reference-status-enum') // eslint-disable-line camelcase
 
 const kWriteCallback = Symbol('write callback')
