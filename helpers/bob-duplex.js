@@ -8,7 +8,10 @@ const status_type = require('../reference-status-enum') // eslint-disable-line c
 
 const kWriteCallback = Symbol('write callback')
 const kDestroyCallback = Symbol('destroy callback')
+const kFinalCallback = Symbol('final callback')
 const kErrored = Symbol('errored')
+const kEnded = Symbol('ended')
+const kPulling = Symbol('pulling')
 
 class BobDuplex extends Duplex {
   // Streams3 <-> BOB interface
@@ -28,7 +31,10 @@ class BobDuplex extends Duplex {
     // Stream callbacks we may need to store until later in a bob flow.
     this[kWriteCallback] = null
     this[kDestroyCallback] = null
+    this[kFinalCallback] = null
     this[kErrored] = false
+    this[kEnded] = false
+    this[kPulling] = false
 
     // Begin paused so we wait for pull.
     // this.cork()
@@ -41,6 +47,15 @@ class BobDuplex extends Duplex {
       throw new Error('_write called again before callback was called')
     }
 
+    if (this[kEnded]) {
+      if (this[kFinalCallback] === null) {
+        throw new Error('write happened but stream was ended without a final callback')
+      }
+      this.sink.next(status_type.end, null, Buffer.alloc(0), 0)
+      this[kFinalCallback]()
+      return
+    }
+
     if (!Buffer.isBuffer(chunk)) {
       chunk = Buffer.from(chunk)
     }
@@ -50,6 +65,8 @@ class BobDuplex extends Duplex {
 
     // Pause and wait for pull.
     // this.cork()
+
+    this[kPulling] = false
 
     // Send data to our sink.
     this.sink.next(status_type.continue, null, chunk, chunk.length)
@@ -89,12 +106,15 @@ class BobDuplex extends Duplex {
   _final (cb) {
     debuglog(`_FINAL ${this.name}`)
 
-    // Called when a chain of Steams3 streams closes, so send an 'end'.
-    this.sink.next(status_type.end, null, Buffer.alloc(0), 0)
+    this[kEnded] = true
 
-    // XXX(Jeremiah) No good spot to do this. Do it here I guess.
-    // Maybe this should be in a nextTick or Immediate. No clue.
-    cb()
+    if (this[kPulling]) {
+      // Called when a chain of Steams3 streams closes, so send an 'end'.
+      this.sink.next(status_type.end, null, Buffer.alloc(0), 0)
+    } else {
+      // Hope that a pull is made...
+      this[kFinalCallback] = cb
+    }
   }
 
   bindSource (source) {
@@ -155,6 +175,13 @@ class BobDuplex extends Duplex {
 
   pull (error, buffer) {
     debuglog(`PULL ${this.name}`, arguments, this[kWriteCallback])
+
+    this[kPulling] = true
+
+    if (this[kFinalCallback]) {
+      this.sink.next(status_type.end, null, Buffer.alloc(0), 0)
+      return
+    }
 
     // Clear the stored write cb to prepare for another.
     const writeCb = this[kWriteCallback]
