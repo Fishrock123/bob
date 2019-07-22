@@ -49,7 +49,6 @@ class BobDuplex extends Duplex {
     this[kWriteCallback] = callback
 
     // Pause and wait for pull.
-    this.cork()
 
     // Send data to our sink.
     this.sink.next(status_type.continue, null, chunk, chunk.length)
@@ -70,20 +69,19 @@ class BobDuplex extends Duplex {
       throw new Error('_destroy called twice')
     }
 
-    if (err) {
-      this[kErrored] = true
+    this[kDestroyCallback] = cb
+    this[kErrored] = true
 
+    if (err) {
       // If there is an error and we have a source, we want to propogate
       // the error upwards so all sources can close.
       // Store the callback for when the error returns to this component.
-      if (this.source !== null) {
-        this.source.pull(err)
-        this[kDestroyCallback] = cb
-      }
+      this.source.pull(err)
     } else {
-      // No error, nothing really to do.
+      // No error, but need to propogate a forced close anyways.
       // XXX(Fishrock): Does BOB need to support propogating a close upwards due to Streams3?
-      cb()
+      // XXX(Fishrock): Use extension-stop?
+      this.source.pull(new Error('BobDuplex: user called stream.destroy()'))
     }
   }
 
