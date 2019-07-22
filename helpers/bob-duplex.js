@@ -57,7 +57,8 @@ class BobDuplex extends Duplex {
     }
 
     if (!Buffer.isBuffer(chunk)) {
-      chunk = Buffer.from(chunk)
+      const encoding = this._readableState.encoding || this._readableState.defaultEncoding
+      chunk = Buffer.from(chunk, encoding)
     }
 
     // Store callback so we can call it when pull is called.
