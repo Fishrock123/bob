@@ -2,7 +2,9 @@
 
 A binary data "streams+" API & implementations via data producers, data consumers, and pull flow.
 
-_The name? something something B~~L~~OB, credit Matteo Collina._
+_The name? B~~L~~OB — Matteo Collina._
+
+_Bytes Over Buffers — Thomas Watson_
 
 This is [a Node.js strategic initiative](https://github.com/nodejs/TSC/blob/master/Strategic-Initiatives.md#current-initiatives) aiming to improve Node.js streaming data interfaces, both within Node.js core internally, and hopefully also as future public APIs.
 
@@ -10,7 +12,7 @@ This is [a Node.js strategic initiative](https://github.com/nodejs/TSC/blob/mast
 
 ## Published Modules
 
-The following modules are published to npm and are _technically usable_.
+The following modules contain usable components (sources, sinks, or transforms) and are published to npm.
 - The status codes enum: [bob-status](https://github.com/Fishrock123/bob-status) _([npm](https://www.npmjs.com/package/bob-status))_
 - A file system source: [fs-source](https://github.com/Fishrock123/fs-source) _([npm](https://www.npmjs.com/package/fs-source))_
 - A file system sink: [fs-sink](https://github.com/Fishrock123/fs-sink) _([npm](https://www.npmjs.com/package/fs-sink))_
@@ -18,7 +20,7 @@ The following modules are published to npm and are _technically usable_.
 - A crc32 transform: [crc-transform](https://github.com/Fishrock123/crc-transform) _([npm](https://www.npmjs.com/package/crc-transform))_
 - Header for the C++ api: [bob-base](https://github.com/Fishrock123/bob-base) _([npm](https://www.npmjs.com/package/bob-base))_
 
-The following modules are not published but are functioning.
+The following modules are not published but are 'functional'.
 - A TCP socket "duplex": [in "socket"](https://github.com/Fishrock123/socket)
 - A TCP server of "duplex" sockets: [also in "socket"](https://github.com/Fishrock123/socket)
 
@@ -37,11 +39,14 @@ The following files serve as the API's reference:
 
 The composition of the classes looks like this:
 ```js
+const { Stream } = require('bob-streams')
+
 const source = new Source(/* args */)
+const xform = new Transform(/* args */)
 const sink = new Sink(/* args */)
 
-sink.bindSource(source)
-sink.start(error => {
+const stream = new Stream(source, xform, sink)
+stream.start(error => {
   // The stream is finished when this is called.
 })
 ```
@@ -120,15 +125,25 @@ Current results estimate a 30% decrease of CPU time in bad cases, and up to 8x d
 
 ## Project Layout
 
-API reference examples sit in the top-level directory and are prefixed by `reference-`. The reference passthrough should be functional.
+API reference examples sit in the top-level directory and are prefixed by `reference-`.
+These are functional and tested when practical, notably `reference-verify`, `reference-passthrough`, and `verify-buffered-transform`.
 
-Functional sources, sinks, and combinations relating to Node.js subsystems sit in subsystem-named directories. Examples include `/fs/` and `/stdio/`.
+Other helpers, such as `Stream()`, reside in the `/helpers/` and `/tests/helpers` directories.
+All useful and usable components in this repo are exported from `index.js` with the `bob-streams` npm module.
+
+Functional sources, sinks, and so on can be found in their own npm modules. See [Published Modules](#Published Modules).
 
 ### Development
 
-You must have a local install of Node master @ ~ 694ac6de5ba2591c8d3d56017b2423bd3e39f769
+#### Tests
+
+`npm install && npm test`
 
 #### Building the addons
+
+The addons are presently very out-of-date.
+
+You must have a local install of Node master @ ~ 694ac6de5ba2591c8d3d56017b2423bd3e39f769
 
 ```
 npm i node-gyp
@@ -136,11 +151,6 @@ node-gyp rebuild --nodedir=your/local/node/dir -C ./addons/passthrough
 node-gyp rebuild --nodedir=your/local/node/dir -C ./addons/fs-sink
 node-gyp rebuild --nodedir=your/local/node/dir -C ./addons/fs-source
 ```
-
-#### Tests
-
-Tests sit in the `/test/` directory.
-For more information, see the [tests readme](tests/readme.md).
 
 ## License
 
