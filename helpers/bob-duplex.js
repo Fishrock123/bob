@@ -31,7 +31,7 @@ class BobDuplex extends Duplex {
     this[kErrored] = false
 
     // Begin paused so we wait for pull.
-    this.cork()
+    // this.cork()
   }
 
   _write (chunk, encoding, callback) {
@@ -49,6 +49,7 @@ class BobDuplex extends Duplex {
     this[kWriteCallback] = callback
 
     // Pause and wait for pull.
+    // this.cork()
 
     // Send data to our sink.
     this.sink.next(status_type.continue, null, chunk, chunk.length)
@@ -160,7 +161,7 @@ class BobDuplex extends Duplex {
     this[kWriteCallback] = null
 
     // We are ready for data, unpause.
-    this.uncork()
+    // this.uncork()
 
     // If we don't yet have a write callback from an attempted Streams3 write, just bail.
     if (!writeCb) {
