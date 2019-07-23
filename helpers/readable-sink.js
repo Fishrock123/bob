@@ -6,12 +6,8 @@ const debuglog = util.debuglog('bob')
 const { Readable } = require('readable-stream')
 const status_type = require('../reference-status-enum') // eslint-disable-line camelcase
 
-const kWriteCallback = Symbol('write callback')
-const kDestroyCallback = Symbol('destroy callback')
-const kFinalCallback = Symbol('final callback')
-const kErrored = Symbol('errored')
-const kEnded = Symbol('ended')
-const kPulling = Symbol('pulling')
+const kDestroyCallback = Symbol('ReadableSink destroy callback')
+const kErrored = Symbol('ReadableSink errored')
 
 class ReadableSink extends Readable {
   // Streams3 <-> BOB interface
@@ -28,15 +24,8 @@ class ReadableSink extends Readable {
     this.name = options.name
 
     // Stream callbacks we may need to store until later in a bob flow.
-    this[kWriteCallback] = null
     this[kDestroyCallback] = null
-    this[kFinalCallback] = null
     this[kErrored] = false
-    this[kEnded] = false
-    this[kPulling] = false
-
-    // Begin paused so we wait for pull.
-    // this.cork()
   }
 
   _read (size) {
@@ -51,7 +40,7 @@ class ReadableSink extends Readable {
     debuglog(`_DESTROY ${this.name}`, arguments)
 
     if (this[kDestroyCallback] !== null) {
-      throw new Error('_destroy called twice')
+      throw new Error('ReadableSink: _destroy called twice')
     }
 
     this[kDestroyCallback] = cb
@@ -66,7 +55,7 @@ class ReadableSink extends Readable {
       // No error, but need to propogate a forced close anyways.
       // XXX(Fishrock): Does BOB need to support propogating a close upwards due to Streams3?
       // XXX(Fishrock): Use extension-stop?
-      this.source.pull(new Error('BobDuplex: user called stream.destroy()'))
+      this.source.pull(new Error('ReadableSink: user called stream.destroy()'))
     }
   }
 
@@ -87,7 +76,7 @@ class ReadableSink extends Readable {
     if (this[kDestroyCallback]) {
       debuglog('destroy callback')
 
-      this[kDestroyCallback]()
+      this[kDestroyCallback](error)
       return
     }
 
@@ -95,14 +84,20 @@ class ReadableSink extends Readable {
     if (error !== null) {
       if (this[kErrored] === false) {
         this[kErrored] = true
-        this.emit('error', error)
+        process.nextTick(_ => this.emit('error', error))
       }
       return
     }
 
-    // Regular data case.
-    if (status === status_type.continue) {
+    // Data cases.
+
+    // Push a chunk only if anything was written.
+    if (bytes > 0) {
       this.push(buffer.slice(0, bytes))
+    }
+
+    // Regular case.
+    if (status === status_type.continue) {
       return
     }
 
@@ -110,16 +105,13 @@ class ReadableSink extends Readable {
     if (status === status_type.end) {
       debuglog(`END in ${this.name} next()`)
 
-      // Push a last chunk only if we have one with any written data.
-      if (bytes > 0) {
-        this.push(buffer.slice(0, bytes))
-      }
       this.push(null)
       return
     }
 
     // If we get to here something is very wrong.
-    throw new Error(`Invalid status without an error: ${status}`)
+    error = new Error(`ReadableSink: Invalid status without an error: ${status}`)
+    process.nextTick(_ => this.emit('error', error))
   }
 }
 
