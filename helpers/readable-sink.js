@@ -84,7 +84,7 @@ class ReadableSink extends Readable {
     if (error !== null) {
       if (this[kErrored] === false) {
         this[kErrored] = true
-        process.nextTick(_ => this.emit('error', error))
+        this.destory(error)
       }
       return
     }
@@ -111,7 +111,7 @@ class ReadableSink extends Readable {
 
     // If we get to here something is very wrong.
     error = new Error(`ReadableSink: Invalid status without an error: ${status}`)
-    process.nextTick(_ => this.emit('error', error))
+    this.destory(error)
   }
 }
 

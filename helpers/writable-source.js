@@ -48,7 +48,7 @@ class WritableSource extends Writable {
       if (this[kFinalCallback] === null) {
         // _write should not have happened.
         const error = new Error('write happened but stream was ended without a final callback')
-        process.nextTick(_ => this.emit('error', error))
+        this.destory(error)
       }
       return
     }
