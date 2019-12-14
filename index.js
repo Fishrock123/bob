@@ -7,5 +7,6 @@ module.exports = {
   StdoutSink: require('./helpers/stdout-sink'),
   Stream: require('./helpers/stream'),
   AssertionSink: require('./tests/helpers/assertion-sink'),
-  AssertionSource: require('./tests/helpers/assertion-source')
+  AssertionSource: require('./tests/helpers/assertion-source'),
+  Verify: require('./reference-verify')
 }

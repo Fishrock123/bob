@@ -12,7 +12,8 @@ tap.test('test file read', t => {
     'StdoutSink',
     'Stream',
     'AssertionSink',
-    'AssertionSource'
+    'AssertionSource',
+    'Verify'
   ], 'Exports are as expected')
 
   t.end()
