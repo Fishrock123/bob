@@ -28,9 +28,9 @@ class AssertionSource extends BufferSource {
   pull (error, buffer) {
     this._pull_count++
 
-    if (error || buffer.length === 0) {
-      console.error('AssertionSource.pull', error, buffer.length)
-    }
+    // if (error || buffer.length === 0) {
+    //   console.error('AssertionSource.pull', error, buffer.length)
+    // }
 
     if (error) {
       if (!(error instanceof this._expected_error_type)) {
