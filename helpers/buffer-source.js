@@ -1,7 +1,7 @@
 'use strict'
 
 const { Buffer } = require('buffer')
-const { Status } = require('../reference-status-enum')
+const Status = require('../reference-status-enum')
 
 class BufferSource {
   constructor (buf) {
