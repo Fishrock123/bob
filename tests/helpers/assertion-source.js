@@ -6,7 +6,7 @@ const status_type = require('bob-status') // eslint-disable-line camelcase
 const BufferSource = require('../../helpers/buffer-source')
 
 class AssertionSource extends BufferSource {
-  constructor (bufs) {
+  constructor (bufs, expectedErrorType = null) {
     if (!Array.isArray(bufs) || Buffer.isBuffer(bufs)) {
       throw new TypeError('AssertionSource requires a plain array.')
     }
@@ -17,6 +17,8 @@ class AssertionSource extends BufferSource {
     this._expected_pulls = bufs.map(buf =>
       Buffer.isBuffer(buf) ? buf.length : Buffer.byteLength(buf)
     )
+
+    this._expected_error_type = expectedErrorType
   }
 
   bindSink (sink) {
@@ -26,7 +28,17 @@ class AssertionSource extends BufferSource {
   pull (error, buffer) {
     this._pull_count++
 
+    if (error || buffer.length === 0) {
+      console.error('AssertionSource.pull', error, buffer.length)
+    }
+
     if (error) {
+      if (!(error instanceof this._expected_error_type)) {
+        error = new Error(
+          `AssertionSource: received unexpected error type.\n ` +
+          `Pull: ${this._pull_count}, Error: ${error.name} Expected: ${this._expected_error_type.name}`
+        )
+      }
       return this.sink.next(status_type.error, error, Buffer.alloc(0), 0)
     }
 

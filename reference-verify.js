@@ -3,6 +3,7 @@
 const status_type = require('./reference-status-enum') // eslint-disable-line camelcase
 const { Buffer } = require('buffer')
 
+const kHadEnd = Symbol('had end')
 const kHadError = Symbol('had error')
 const kSentError = Symbol('sent error')
 const kPullInProgress = Symbol('pull in progress')
@@ -13,6 +14,7 @@ class Verify {
     this.sink = null
     this.source = null
 
+    this[kHadEnd] = false
     this[kHadError] = false
     this[kSentError] = false
     this[kPullInProgress] = false
@@ -70,18 +72,27 @@ class Verify {
   next (status, error, buffer, bytes) {
     checkBind(this)
 
+    console.error(`Verify.next [${status_type[status]}]`)
+
     if (this[kHadError]) {
       if (this[kSentError]) {
         return
       }
+
       this[kSentError] = true
       this.sink.next(status_type.error, error, buffer, bytes)
     }
 
+    // next after end
+    if (this[kHadEnd]) {
+      throw new Error('[verify] next was called after stream ended')
+    }
+
     // the proper place to notify of a multiple pull
     if (this[kPullInProgressError] !== null) {
-      this[kHadError] = true
+      console.error('Verify.next kPullInProgressError')
       this.source.pull(this[kPullInProgressError], Buffer.alloc(0))
+      this[kPullInProgressError] = null
       return
     }
 
@@ -120,6 +131,7 @@ class Verify {
     if (!this[kPullInProgress]) {
       // If doing this explodes things were wrong enough to warrent it.
       this[kHadError] = true
+      console.error('Verify.next unwarrentedNext')
       this.source.pull(
         new Error('[verify] next() was called without a pull in progress'),
         Buffer.alloc(0)
@@ -129,17 +141,22 @@ class Verify {
 
     this[kPullInProgress] = false
 
-    if (error !== null) {
-      this[kHadError] = true
+    if (status === status_type.end) {
+      this[kHadEnd] = true
     }
 
-    setImmediate(_ => {
-      this.sink.next(status, error, buffer, bytes)
-    })
+    if (error !== null) {
+      this[kHadError] = true
+      this[kSentError] = true
+    }
+
+    this.sink.next(status, error, buffer, bytes)
   }
 
   pull (error, buffer) {
     checkBind(this)
+
+    console.error(`Verify.pull [${error}]`)
 
     // multiple pull()
     if (this[kPullInProgress]) {
@@ -150,8 +167,12 @@ class Verify {
 
     // pull after errored
     if (this[kHadError]) {
-      // If this occurs all upstream components are allready in a closed or errored state.
+      if (this[kSentError]) {
+        return
+      }
+      // If this occurs all upstream components are already in a closed or errored state.
       // Return to the nearest available handler, the component which sent us the new pull.
+      this[kSentError] = true
       this.sink.next(
         status_type.error,
         new Error(`[verify] verify has already tracked an error, invalid post-mortem pull() made by: ${this.sink}`),
@@ -159,6 +180,11 @@ class Verify {
         0
       )
       return
+    }
+
+    // pull after end
+    if (this[kHadEnd]) {
+      throw new Error('[verify] pull was called after stream ended')
     }
 
     try {
@@ -172,6 +198,7 @@ class Verify {
       }
     } catch (err) {
       this[kHadError] = true
+      console.error('Verify.pull kHadError')
       this.source.pull(err, Buffer.alloc(0))
       return
     }
@@ -180,9 +207,7 @@ class Verify {
       this[kHadError] = true
     }
 
-    setImmediate(_ => {
-      this.source.pull(error, buffer)
-    })
+    this.source.pull(error, buffer)
   }
 }
 
