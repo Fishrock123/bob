@@ -1,7 +1,7 @@
 'use strict'
 
-const { Buffer } = require('buffer')
-const { Status } = require('../')
+const Status = require('../reference-status-enum')
+const ReadableSink = require('./readable-sink')
 
 class StdoutSink {
   constructor (encoding) {
@@ -10,46 +10,38 @@ class StdoutSink {
 
     this.encoding = encoding
 
-    try {
-      this._buffer = Buffer.allocUnsafe(64 * 1024)
-    } catch (error) {
-      this._allocError = error
-    }
+    this._sink = null
+  }
+
+  bindSink (sink) {
+    this._sink = sink
   }
 
   bindSource (source) {
     this.source = source
     this.source.bindSink(this)
+
+    const sink = new ReadableSink({ encoding: this.encoding })
+    sink.bindSource(this)
+
     return this
   }
 
   start (exitCb) {
-    if (this._allocError) {
-      return exitCb(this._allocError)
-    }
     this.exitCb = exitCb
 
-    this.source.pull(null, this._buffer)
+    this._sink.pipe(process.stdout)
   }
 
   next (status, error, buffer, bytes) {
     if (status === Status.error || error) {
-      return this.exitCb(error)
+      this.exitCb(error)
     }
+    this._sink.next(status, error, buffer, bytes)
+  }
 
-    buffer = buffer.slice(0, bytes)
-    if (this.encoding) {
-      process.stdout.write(buffer.toString(this.encoding))
-    } else {
-      process.stdout.write(buffer)
-    }
-
-    if (status === Status.end) {
-      process.stdout.write('\n')
-      this.exitCb(null)
-    } else {
-      this.source.pull(null, this._buffer)
-    }
+  pull (error, buffer) {
+    this.source.pull(error, buffer)
   }
 }
 
