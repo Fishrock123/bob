@@ -27,7 +27,6 @@
   },
   "homepage": "https://github.com/Fishrock123/bob#readme",
   "dependencies": {
-    "bob-status": "0.0.1",
     "fs-sink": "0.1.3",
     "fs-source": "0.0.3",
     "readable-stream": "3.4.0",

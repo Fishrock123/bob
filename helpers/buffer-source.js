@@ -1,7 +1,7 @@
 'use strict'
 
 const { Buffer } = require('buffer')
-const Status = require('bob-status')
+const { Status } = require('../')
 
 class BufferSource {
   constructor (buf) {

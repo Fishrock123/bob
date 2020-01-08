@@ -1,8 +1,7 @@
 'use strict'
 
 const { Buffer } = require('buffer')
-const Status = require('bob-status')
-
+const Status = require('../../reference-status-enum')
 const BufferSource = require('../../helpers/buffer-source')
 
 class AssertionSource extends BufferSource {

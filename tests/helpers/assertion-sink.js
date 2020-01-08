@@ -2,7 +2,7 @@
 
 const { Buffer } = require('buffer')
 const util = require('util')
-const Status = require('bob-status')
+const Status = require('../../reference-status-enum')
 
 class AssertionSink {
   constructor (assertions_queue, encoding) { // eslint-disable-line camelcase
