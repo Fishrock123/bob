@@ -72,7 +72,7 @@ class Verify {
   next (status, error, buffer, bytes) {
     checkBind(this)
 
-    console.error(`Verify.next [${status_type[status]}]`)
+    // console.error(`Verify.next [${status_type[status]}]`)
 
     if (this[kHadError]) {
       if (this[kSentError]) {
@@ -90,7 +90,7 @@ class Verify {
 
     // the proper place to notify of a multiple pull
     if (this[kPullInProgressError] !== null) {
-      console.error('Verify.next kPullInProgressError')
+      // console.error('Verify.next kPullInProgressError')
       this.source.pull(this[kPullInProgressError], Buffer.alloc(0))
       this[kPullInProgressError] = null
       return
@@ -131,7 +131,7 @@ class Verify {
     if (!this[kPullInProgress]) {
       // If doing this explodes things were wrong enough to warrent it.
       this[kHadError] = true
-      console.error('Verify.next unwarrentedNext')
+      // console.error('Verify.next unwarrentedNext')
       this.source.pull(
         new Error('[verify] next() was called without a pull in progress'),
         Buffer.alloc(0)
@@ -156,7 +156,7 @@ class Verify {
   pull (error, buffer) {
     checkBind(this)
 
-    console.error(`Verify.pull [${error}]`)
+    // console.error(`Verify.pull [${error}]`)
 
     // multiple pull()
     if (this[kPullInProgress]) {
@@ -198,7 +198,7 @@ class Verify {
       }
     } catch (err) {
       this[kHadError] = true
-      console.error('Verify.pull kHadError')
+      // console.error('Verify.pull kHadError')
       this.source.pull(err, Buffer.alloc(0))
       return
     }
