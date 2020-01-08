@@ -6,6 +6,7 @@ tap.test('test file read', t => {
   t.plan(1)
 
   t.deepEqual(Object.keys(require('../')), [
+    'Status',
     'status_type',
     'Asyncify',
     'Passthrough',

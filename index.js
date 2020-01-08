@@ -1,7 +1,9 @@
 'use strict'
 
 module.exports = {
-  status_type: require('./reference-status-enum'), // eslint-disable-line camelcase
+  Status: require('./reference-status-enum'),
+  // eslint-disable-next-line camelcase
+  status_type: require('./reference-status-enum'), // Backwards-compat
   Asyncify: require('./helpers/asyncify'),
   Passthrough: require('./reference-passthrough'),
   BufferSource: require('./helpers/buffer-source'),
