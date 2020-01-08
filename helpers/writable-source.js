@@ -4,7 +4,7 @@ const util = require('util')
 const debuglog = util.debuglog('bob')
 
 const { Writable } = require('readable-stream')
-const status_type = require('../reference-status-enum') // eslint-disable-line camelcase
+const Status = require('../reference-status-enum')
 
 const kWriteCallback = Symbol('WritableSource write callback')
 const kDestroyCallback = Symbol('WritableSource destroy callback')
@@ -64,7 +64,7 @@ class WritableSource extends Writable {
     this[kPulling] = false
 
     // Send data to our sink.
-    this.sink.next(status_type.continue, null, chunk, chunk.length)
+    this.sink.next(Status.continue, null, chunk, chunk.length)
   }
 
   _destroy (err, cb) {
@@ -82,7 +82,7 @@ class WritableSource extends Writable {
       // If there is an error and we have a source, we want to propogate
       // the error upwards so all sources can close.
       // Store the callback for when the error returns to this component.
-      this.sink.next(status_type.error, err, Buffer.alloc(0), 0)
+      this.sink.next(Status.error, err, Buffer.alloc(0), 0)
     }
     // Otherwise wait for _final (?)
   }
@@ -94,7 +94,7 @@ class WritableSource extends Writable {
 
     if (this[kPulling]) {
       // Called when a chain of Steams3 streams closes, so send an 'end'.
-      this.sink.next(status_type.end, null, Buffer.alloc(0), 0)
+      this.sink.next(Status.end, null, Buffer.alloc(0), 0)
       cb()
     } else {
       // Hope that a pull is made...
@@ -117,10 +117,10 @@ class WritableSource extends Writable {
 
     if (typeof this[kFinalCallback] === 'function') {
       if (error) {
-        this.sink.next(status_type.error, error, Buffer.alloc(0), 0)
+        this.sink.next(Status.error, error, Buffer.alloc(0), 0)
         this[kFinalCallback](error)
       } else {
-        this.sink.next(status_type.end, null, Buffer.alloc(0), 0)
+        this.sink.next(Status.end, null, Buffer.alloc(0), 0)
         this[kFinalCallback]()
       }
       return

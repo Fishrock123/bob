@@ -1,7 +1,7 @@
 'use strict'
 
 const { Buffer } = require('buffer')
-const status_type = require('./reference-status-enum') // eslint-disable-line camelcase
+const Status = require('./reference-status-enum')
 
 class Sink {
   constructor () {
@@ -30,12 +30,12 @@ class Sink {
 
   next (status, error, buffer, bytes) {
     // status MUST be a valid status indicator (string currently)
-    //  options are: status_type.error, status_type.continue, or status_type.end
+    //  options are: Status.error, Status.continue, or Status.end
     // error MUST be null or an error
     // buffer MUST be a Buffer
     // bytes MUST be the number of bytes read
 
-    if (error || status === status_type.end) {
+    if (error || status === Status.end) {
       // cleanup
       return this.exitCb(error)
     }

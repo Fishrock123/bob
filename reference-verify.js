@@ -1,6 +1,6 @@
 'use strict'
 
-const status_type = require('./reference-status-enum') // eslint-disable-line camelcase
+const Status = require('./reference-status-enum')
 const { Buffer } = require('buffer')
 
 const kHadEnd = Symbol('had end')
@@ -72,7 +72,7 @@ class Verify {
   next (status, error, buffer, bytes) {
     checkBind(this)
 
-    // console.error(`Verify.next [${status_type[status]}]`)
+    // console.error(`Verify.next [${Status[status]}]`)
 
     if (this[kHadError]) {
       if (this[kSentError]) {
@@ -80,7 +80,7 @@ class Verify {
       }
 
       this[kSentError] = true
-      this.sink.next(status_type.error, error, buffer, bytes)
+      this.sink.next(Status.error, error, buffer, bytes)
     }
 
     // next after end
@@ -99,15 +99,15 @@ class Verify {
     try {
       // status
       if (typeof status !== 'number' &&
-          status_type[status_type] === undefined) {
+          Status[Status] === undefined) {
         throw new TypeError(`[verify] status passed to next() was not a valid status: ${status}`)
       }
       // error
       if (error !== null && !(error instanceof Error)) {
         throw new TypeError(`[verify] error passed to next() was non-null and not an Error: ${error}`)
       }
-      if (error !== null && status !== status_type.error) {
-        throw new TypeError(`[verify] error passed  to next() but status was not 'error', instead: ${status_type[status]}`)
+      if (error !== null && status !== Status.error) {
+        throw new TypeError(`[verify] error passed  to next() but status was not 'error', instead: ${Status[status]}`)
       }
       // buffer
       if (error !== null && !Buffer.isBuffer(buffer)) {
@@ -141,7 +141,7 @@ class Verify {
 
     this[kPullInProgress] = false
 
-    if (status === status_type.end) {
+    if (status === Status.end) {
       this[kHadEnd] = true
     }
 
@@ -174,7 +174,7 @@ class Verify {
       // Return to the nearest available handler, the component which sent us the new pull.
       this[kSentError] = true
       this.sink.next(
-        status_type.error,
+        Status.error,
         new Error(`[verify] verify has already tracked an error, invalid post-mortem pull() made by: ${this.sink}`),
         Buffer.alloc(0),
         0

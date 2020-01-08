@@ -1,7 +1,7 @@
 'use strict'
 
 const { Buffer } = require('buffer')
-const status_type = require('bob-status') // eslint-disable-line camelcase
+const Status = require('bob-status')
 
 class BufferSource {
   constructor (buf) {
@@ -35,12 +35,12 @@ class BufferSource {
 
   pull (error, buffer) {
     if (error) {
-      return this.sink.next(status_type.error, error, Buffer.alloc(0), 0)
+      return this.sink.next(Status.error, error, Buffer.alloc(0), 0)
     }
 
     if (this._offset >= this._buffer.length) {
       error = new Error(`BufferSource: pull after end. Offset: ${this._offset}`)
-      return this.sink.next(status_type.error, error, Buffer.alloc(0), 0)
+      return this.sink.next(Status.error, error, Buffer.alloc(0), 0)
     }
 
     if (!Buffer.isBuffer(buffer)) {
@@ -56,9 +56,9 @@ class BufferSource {
     // console.log('BufferSource - Offset: ' + this._offset + ' , buf.length: ' + this._buffer.length)
 
     if (this._offset < this._buffer.length - 1) {
-      this.sink.next(status_type.continue, null, buffer, bytesWritten)
+      this.sink.next(Status.continue, null, buffer, bytesWritten)
     } else {
-      this.sink.next(status_type.end, null, buffer, bytesWritten)
+      this.sink.next(Status.end, null, buffer, bytesWritten)
     }
   }
 }

@@ -1,6 +1,6 @@
 'use strict'
 
-const status_type = require('./reference-status-enum') // eslint-disable-line camelcase
+const Status = require('./reference-status-enum')
 
 class Source {
   constructor () {
@@ -16,13 +16,13 @@ class Source {
     // error MUST be null or an error
     // buffer MUST be a Buffer
     if (error) {
-      return this.sink.next(status_type.error, error)
+      return this.sink.next(Status.error, error)
     }
 
     // if there was an error reading or processing the buffer...
     const sourceError = new Error()
     if (sourceError) {
-      return this.sink.next(status_type.error, error)
+      return this.sink.next(Status.error, error)
     }
 
     // read into buffer
@@ -30,9 +30,9 @@ class Source {
     const bytesWritten = 0 // Number of bytes written to the buffer
 
     if (more) {
-      this.sink.next(status_type.continue, null, buffer, bytesWritten)
+      this.sink.next(Status.continue, null, buffer, bytesWritten)
     } else {
-      this.sink.next(status_type.end, null, buffer, bytesWritten)
+      this.sink.next(Status.end, null, buffer, bytesWritten)
     }
   }
 }

@@ -4,7 +4,7 @@ const util = require('util')
 const debuglog = util.debuglog('bob')
 
 const { Readable } = require('readable-stream')
-const status_type = require('../reference-status-enum') // eslint-disable-line camelcase
+const Status = require('../reference-status-enum')
 
 const kDestroyCallback = Symbol('ReadableSink destroy callback')
 const kErrored = Symbol('ReadableSink errored')
@@ -69,7 +69,7 @@ class ReadableSink extends Readable {
   }
 
   next (status, error, buffer, bytes) {
-    debuglog(`NEXT ${this.name}`, status_type[status], arguments)
+    debuglog(`NEXT ${this.name}`, Status[status], arguments)
 
     // If there was a destroy callback we were not getting data,
     // but rather attempting to close things with an error.
@@ -97,12 +97,12 @@ class ReadableSink extends Readable {
     }
 
     // Regular case.
-    if (status === status_type.continue) {
+    if (status === Status.continue) {
       return
     }
 
     // End from upstream source.
-    if (status === status_type.end) {
+    if (status === Status.end) {
       debuglog(`END in ${this.name} next()`)
 
       this.push(null)

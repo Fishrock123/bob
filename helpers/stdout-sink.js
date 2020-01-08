@@ -1,7 +1,7 @@
 'use strict'
 
 const { Buffer } = require('buffer')
-const status_type = require('bob-status') // eslint-disable-line camelcase
+const Status = require('bob-status')
 
 class StdoutSink {
   constructor (encoding) {
@@ -33,7 +33,7 @@ class StdoutSink {
   }
 
   next (status, error, buffer, bytes) {
-    if (status === status_type.error || error) {
+    if (status === Status.error || error) {
       return this.exitCb(error)
     }
 
@@ -44,7 +44,7 @@ class StdoutSink {
       process.stdout.write(buffer)
     }
 
-    if (status === status_type.end) {
+    if (status === Status.end) {
       process.stdout.write('\n')
       this.exitCb(null)
     } else {

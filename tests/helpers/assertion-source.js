@@ -1,7 +1,7 @@
 'use strict'
 
 const { Buffer } = require('buffer')
-const status_type = require('bob-status') // eslint-disable-line camelcase
+const Status = require('bob-status')
 
 const BufferSource = require('../../helpers/buffer-source')
 
@@ -39,7 +39,7 @@ class AssertionSource extends BufferSource {
           `Pull: ${this._pull_count}, Error: ${error.name} Expected: ${this._expected_error_type.name}`
         )
       }
-      return this.sink.next(status_type.error, error, Buffer.alloc(0), 0)
+      return this.sink.next(Status.error, error, Buffer.alloc(0), 0)
     }
 
     if (this._pull_count > this._expected_pulls.length) {
@@ -47,7 +47,7 @@ class AssertionSource extends BufferSource {
         `AssertionSource: received more pulls than expected.\n ` +
         `Pull: ${this._pull_count}, Expected: ${this._expected_pulls.length}`
       )
-      return this.sink.next(status_type.error, error, Buffer.alloc(0), 0)
+      return this.sink.next(Status.error, error, Buffer.alloc(0), 0)
     }
 
     const bytesRemaining = this._buffer.length - this._offset
@@ -62,7 +62,7 @@ class AssertionSource extends BufferSource {
         `AssertionSource: received less pulls than expected.\n ` +
         `Pull: ${this._pull_count}, Expected: ${this._expected_pulls.length}`
       )
-      return this.sink.next(status_type.error, error, Buffer.alloc(0), 0)
+      return this.sink.next(Status.error, error, Buffer.alloc(0), 0)
     }
 
     super.pull(error, buffer)

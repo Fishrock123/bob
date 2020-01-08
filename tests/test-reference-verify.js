@@ -2,7 +2,7 @@
 
 const tap = require('tap')
 
-const status_type = require('../reference-status-enum') // eslint-disable-line camelcase
+const Status = require('../reference-status-enum')
 const AssertionSource = require('./helpers/assertion-source')
 const AssertionSink = require('./helpers/assertion-sink')
 const Verify = require('../reference-verify')
@@ -18,7 +18,7 @@ tap.test('test reference verify source TypeError', t => {
     }
 
     pull () {
-      this.sink.next(status_type.continue, 'maybe error', 3, Buffer)
+      this.sink.next(Status.continue, 'maybe error', 3, Buffer)
     }
   }
 
@@ -48,9 +48,9 @@ class DoublePullSink {
   }
 
   next (status, error) {
-    if (status === status_type.error) {
+    if (status === Status.error) {
       this.exitCb(error)
-    } else if (status === status_type.continue) {
+    } else if (status === Status.continue) {
       this.source.pull(null, Buffer.alloc(10))
     } else {
       this.exitCb(null)

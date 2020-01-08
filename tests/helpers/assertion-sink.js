@@ -2,7 +2,7 @@
 
 const { Buffer } = require('buffer')
 const util = require('util')
-const status_type = require('bob-status') // eslint-disable-line camelcase
+const Status = require('bob-status')
 
 class AssertionSink {
   constructor (assertions_queue, encoding) { // eslint-disable-line camelcase
@@ -29,7 +29,7 @@ class AssertionSink {
   }
 
   next (status, error, buffer, bytes) {
-    if (status === status_type.error) return this.exitCb(error)
+    if (status === Status.error) return this.exitCb(error)
 
     const buf = this._encoding ? buffer.slice(0, bytes).toString(this._encoding) : buffer.slice(0, bytes)
 
@@ -37,7 +37,7 @@ class AssertionSink {
     // util.inspect(buf, { colors: true }) +
     // '\nwanted: ' +
     // util.inspect(this._assertions_queue[this._queue_index], { colors: true }) +
-    // '\nstatus: ' + status_type[status])
+    // '\nstatus: ' + Status[status])
 
     if (!util.isDeepStrictEqual(this._assertions_queue[this._queue_index], buf)) {
       error = new Error(
@@ -46,14 +46,14 @@ class AssertionSink {
         '\nwanted: ' +
         util.inspect(this._assertions_queue[this._queue_index], { colors: true })
       )
-      if (status === status_type.end) {
+      if (status === Status.end) {
         return this.exitCb(error)
       } else {
         return this.source.pull(error, Buffer.alloc(0))
       }
     }
 
-    if (status === status_type.end) return this.exitCb()
+    if (status === Status.end) return this.exitCb()
 
     this._queue_index++
     if (this._queue_index === this._assertions_queue.length) {

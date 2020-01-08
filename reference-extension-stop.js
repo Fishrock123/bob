@@ -1,6 +1,6 @@
 'use strict'
 
-const status_type = require('./reference-status-enum') // eslint-disable-line camelcase
+const Status = require('./reference-status-enum')
 const Source = require('./reference-source')
 
 const kStopped = Symbol('stopped')
@@ -18,7 +18,7 @@ class StopExtensionSource extends Source {
 
   pull (error, buffer) {
     if (this[kStopped]) {
-      this.sink.next(status_type.end, null, buffer, 0)
+      this.sink.next(Status.end, null, buffer, 0)
       return
     }
 
