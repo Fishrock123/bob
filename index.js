@@ -2,6 +2,7 @@
 
 module.exports = {
   status_type: require('./reference-status-enum'), // eslint-disable-line camelcase
+  Asyncify: require('./helpers/asyncify'),
   Passthrough: require('./reference-passthrough'),
   BufferSource: require('./helpers/buffer-source'),
   StdoutSink: require('./helpers/stdout-sink'),

@@ -7,6 +7,7 @@ tap.test('test file read', t => {
 
   t.deepEqual(Object.keys(require('../')), [
     'status_type',
+    'Asyncify',
     'Passthrough',
     'BufferSource',
     'StdoutSink',
